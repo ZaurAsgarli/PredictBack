@@ -9,9 +9,6 @@ import environ
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# Use SQLite by default for local development if USE_SQLITE is not explicitly disabled
-USE_SQLITE = os.getenv("USE_SQLITE", "1") == "1"
-
 # Initialize environment variables
 env = environ.Env(
     DEBUG=(bool, False)
@@ -87,25 +84,23 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'config.wsgi.application'
 
-# Database
-if USE_SQLITE:
-    DATABASES = {
-        "default": {
-            "ENGINE": "django.db.backends.sqlite3",
-            "NAME": BASE_DIR / "db.sqlite3",
-        }
+# Database - PostgreSQL only
+# In Docker, use 'db' as host, otherwise use environment variable or localhost
+POSTGRES_HOST = env("POSTGRES_HOST", default=None)
+if POSTGRES_HOST is None:
+    # Auto-detect Docker environment
+    POSTGRES_HOST = env("DB_HOST", default="db" if os.path.exists("/.dockerenv") else "localhost")
+
+DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": env("POSTGRES_DB", default=env("DB_NAME", default="predicthub_db")),
+        "USER": env("POSTGRES_USER", default=env("DB_USER", default="postgres")),
+        "PASSWORD": env("POSTGRES_PASSWORD", default=env("DB_PASSWORD", default="postgres")),
+        "HOST": POSTGRES_HOST,
+        "PORT": env("POSTGRES_PORT", default=env("DB_PORT", default="5432")),
     }
-else:
-    DATABASES = {
-        "default": {
-            "ENGINE": "django.db.backends.postgresql",
-            "NAME": "predicthub",
-            "USER": "postgres",
-            "PASSWORD": "CHANGE_ME",
-            "HOST": "localhost",
-            "PORT": "5432",
-        }
-    }
+}
 
 # Custom User Model
 AUTH_USER_MODEL = 'users.User'
@@ -261,4 +256,20 @@ LOGGING = {
 MARKET_DEFAULT_FEE_PERCENTAGE = 0.02  # 2%
 MARKET_DISPUTE_WINDOW_HOURS = 48
 MARKET_DEFAULT_BOND_AMOUNT = 100.0
+
+# Web3 Configuration
+WEB3_PROVIDER_HTTP = env('WEB3_PROVIDER_HTTP', default='')
+WEB3_PROVIDER_WS = env('WEB3_PROVIDER_WS', default='')
+ALCHEMY_SEPOLIA_URL = env('ALCHEMY_SEPOLIA_URL', default='')
+CHAIN_ID = int(env('CHAIN_ID', default='84532'))  # Base Sepolia = 84532
+CONTRACT_ADDRESS = env('CONTRACT_ADDRESS', default='')
+PRIVATE_KEY = env('PRIVATE_KEY', default='')
+DEPLOYER_PRIVATE_KEY = env('DEPLOYER_PRIVATE_KEY', default='')
+WALLET_ADDRESS = env('WALLET_ADDRESS', default='')
+
+# Contract ABI path
+CONTRACT_ABI_PATH = env(
+    'CONTRACT_ABI_PATH',
+    default=os.path.join(BASE_DIR, 'utils', 'abi', 'PredictionMarket.json')
+)
 

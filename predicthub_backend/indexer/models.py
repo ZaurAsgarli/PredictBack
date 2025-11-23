@@ -19,9 +19,9 @@ class OnchainTransaction(models.Model):
 
     class Meta:
         indexes = [
-            models.Index(fields=["tx_hash"]),
+            models.Index(fields=["tx_hash"]),  # Hot-path: tx_hash
             models.Index(fields=["network", "status"]),
-            models.Index(fields=["block_number"]),
+            models.Index(fields=["block_number"]),  # Hot-path: block_number
         ]
 
     def __str__(self):
@@ -51,9 +51,9 @@ class OnchainEventLog(models.Model):
     class Meta:
         unique_together = ("tx_hash", "log_index")
         indexes = [
-            models.Index(fields=["tx_hash"]),
-            models.Index(fields=["market"]),
-            models.Index(fields=["event_name"]),
+            models.Index(fields=["tx_hash"]),  # Hot-path: tx_hash
+            models.Index(fields=["market"]),  # Hot-path: market_id
+            models.Index(fields=["event_name"]),  # Hot-path: event_name
             models.Index(fields=["user_address"]),
         ]
 

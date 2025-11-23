@@ -30,6 +30,8 @@
 │ amount_staked     │
 │ tokens_amount     │
 │ price_at_execution│
+│ onchain_tx_hash   │
+│ onchain_trade_id  │
 │ created_at        │
 └───────────────────┘
       │
@@ -47,6 +49,8 @@
 │ resolution_outcome│
 │ liquidity_pool    │
 │ fee_percentage    │
+│ onchain_market_id │
+│ onchain_tx_hash   │
 │ created_by (FK)   │
 │ created_at        │
 │ ends_at           │
@@ -110,6 +114,7 @@
 │ resolver (FK)     │
 │ dispute_window    │
 │ bond_amount       │
+│ onchain_tx_hash   │
 │ created_at        │
 └───────────────────┘
       │
@@ -161,6 +166,8 @@
 │ user_id (FK)      │
 │ event_type        │
 │ amount            │
+│ onchain_tx_hash   │
+│ onchain_liquidity_id│
 │ created_at        │
 └───────────────────┘
 
@@ -197,4 +204,64 @@
 - **Market** → **LiquidityEvent** (1:N) - A market can have many liquidity events
 - **Market** → **MarketCategory** (N:1) - Many markets belong to one category
 - **Resolution** → **Dispute** (1:N) - A resolution can have many disputes
+
+## Indexer Models
+
+```
+┌──────────────────────┐
+│ OnchainTransaction   │
+├──────────────────────┤
+│ id (PK)              │
+│ tx_hash (UNIQUE)     │
+│ network              │
+│ block_number         │
+│ status               │
+│ error_message        │
+│ created_at           │
+│ updated_at           │
+└──────────────────────┘
+      │
+      │ 1
+      │
+      │ *
+┌─────┴──────────────────┐
+│ OnchainEventLog        │
+├────────────────────────┤
+│ id (PK)                │
+│ onchain_tx (FK)        │
+│ event_name             │
+│ tx_hash                │
+│ log_index              │
+│ market_id (FK)         │
+│ user_address           │
+│ payload_json           │
+│ processed_at           │
+│ duplicate              │
+│ created_at             │
+└────────────────────────┘
+      │
+      │ *
+      │
+      │ 1
+┌─────┴─────────────┐
+│     Market        │
+└───────────────────┘
+```
+
+## Materialized View
+
+```
+┌──────────────────────┐
+│ market_activity_view │
+├──────────────────────┤
+│ market_id (PK)       │
+│ title                │
+│ status               │
+│ total_trades         │
+│ total_liquidity_added│
+│ last_activity_timestamp│
+│ volume_24h           │
+│ open_interest        │
+└──────────────────────┘
+```
 

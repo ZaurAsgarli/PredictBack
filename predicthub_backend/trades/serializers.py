@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from decimal import Decimal
 from .models import Trade
 from markets.serializers import MarketSerializer
 from markets.models import Market
@@ -29,7 +30,7 @@ class TradeCreateSerializer(serializers.Serializer):
     market_id = serializers.IntegerField()
     outcome_type = serializers.ChoiceField(choices=['YES', 'NO'])
     trade_type = serializers.ChoiceField(choices=['buy', 'sell'])
-    amount_staked = serializers.DecimalField(max_digits=12, decimal_places=2, min_value=0)
+    amount_staked = serializers.DecimalField(max_digits=12, decimal_places=2, min_value=Decimal('0'))
     
     def validate(self, attrs):
         market_id = attrs['market_id']

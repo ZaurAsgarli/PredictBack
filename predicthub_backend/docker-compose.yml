@@ -6,16 +6,29 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
     environment:
-      POSTGRES_DB: predicthub_db
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: ${POSTGRES_DB:-predicthub_db}
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
     ports:
       - "5432:5432"
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-postgres}"]
       interval: 10s
       timeout: 5s
       retries: 5
+
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL:-admin@gmail.com}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD:-admin}
+      PGADMIN_CONFIG_SERVER_MODE: 'False'
+    ports:
+      - "5050:80"
+    depends_on:
+      - db
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
 
   redis:
     image: redis:7-alpine
@@ -42,10 +55,11 @@ services:
       redis:
         condition: service_healthy
     environment:
-      - DB_HOST=db
-      - DB_NAME=predicthub_db
-      - DB_USER=postgres
-      - DB_PASSWORD=postgres
+      - POSTGRES_HOST=db
+      - POSTGRES_DB=${POSTGRES_DB:-predicthub_db}
+      - POSTGRES_USER=${POSTGRES_USER:-postgres}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-postgres}
+      - POSTGRES_PORT=5432
       - CELERY_BROKER_URL=redis://redis:6379/0
       - CELERY_RESULT_BACKEND=redis://redis:6379/0
 
@@ -61,10 +75,11 @@ services:
       - redis
       - web
     environment:
-      - DB_HOST=db
-      - DB_NAME=predicthub_db
-      - DB_USER=postgres
-      - DB_PASSWORD=postgres
+      - POSTGRES_HOST=db
+      - POSTGRES_DB=${POSTGRES_DB:-predicthub_db}
+      - POSTGRES_USER=${POSTGRES_USER:-postgres}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-postgres}
+      - POSTGRES_PORT=5432
       - CELERY_BROKER_URL=redis://redis:6379/0
       - CELERY_RESULT_BACKEND=redis://redis:6379/0
 
@@ -80,13 +95,15 @@ services:
       - redis
       - web
     environment:
-      - DB_HOST=db
-      - DB_NAME=predicthub_db
-      - DB_USER=postgres
-      - DB_PASSWORD=postgres
+      - POSTGRES_HOST=db
+      - POSTGRES_DB=${POSTGRES_DB:-predicthub_db}
+      - POSTGRES_USER=${POSTGRES_USER:-postgres}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-postgres}
+      - POSTGRES_PORT=5432
       - CELERY_BROKER_URL=redis://redis:6379/0
       - CELERY_RESULT_BACKEND=redis://redis:6379/0
 
 volumes:
   postgres_data:
+  pgadmin_data:
 

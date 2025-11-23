@@ -11,4 +11,6 @@ redis==5.2.0
 pytest==8.3.4
 pytest-django==4.9.0
 pytest-cov==6.0.0
-
+web3==7.14.0
+setuptools==80.9.0
+websockets==14.1

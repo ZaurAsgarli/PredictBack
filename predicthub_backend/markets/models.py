@@ -1,5 +1,6 @@
 from django.db import models
 from django.core.validators import MinValueValidator
+from decimal import Decimal
 from users.models import User
 
 
@@ -31,8 +32,10 @@ class Market(models.Model):
     category = models.ForeignKey(MarketCategory, on_delete=models.PROTECT, related_name='markets')
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='active')
     resolution_outcome = models.CharField(max_length=10, null=True, blank=True, choices=[('YES', 'YES'), ('NO', 'NO')])
-    liquidity_pool = models.DecimalField(max_digits=12, decimal_places=2, default=0.0, validators=[MinValueValidator(0)])
+    liquidity_pool = models.DecimalField(max_digits=12, decimal_places=2, default=0.0, validators=[MinValueValidator(Decimal('0'))])
     fee_percentage = models.DecimalField(max_digits=5, decimal_places=4, default=0.02)
+    onchain_market_id = models.BigIntegerField(null=True, blank=True, unique=True, db_index=True)
+    onchain_tx_hash = models.CharField(max_length=80, blank=True, null=True, db_index=True)
     created_at = models.DateTimeField(auto_now_add=True)
     ends_at = models.DateTimeField()
     created_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='created_markets')
@@ -44,6 +47,8 @@ class Market(models.Model):
             models.Index(fields=['category', 'status']),
             models.Index(fields=['ends_at']),
             models.Index(fields=['created_by']),
+            models.Index(fields=['onchain_market_id']),
+            models.Index(fields=['onchain_tx_hash']),
         ]
     
     def __str__(self):
@@ -77,7 +82,7 @@ class OutcomeToken(models.Model):
     market = models.ForeignKey(Market, on_delete=models.CASCADE, related_name='outcome_tokens')
     outcome_type = models.CharField(max_length=10, choices=OUTCOME_CHOICES)
     price = models.DecimalField(max_digits=8, decimal_places=6, default=0.5)
-    supply = models.DecimalField(max_digits=12, decimal_places=2, default=0.0, validators=[MinValueValidator(0)])
+    supply = models.DecimalField(max_digits=12, decimal_places=2, default=0.0, validators=[MinValueValidator(Decimal('0'))])
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     
@@ -117,6 +122,7 @@ class Resolution(models.Model):
     resolver = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='resolved_markets')
     dispute_window = models.DateTimeField()
     bond_amount = models.DecimalField(max_digits=10, decimal_places=2, default=100.0)
+    onchain_tx_hash = models.CharField(max_length=80, blank=True, null=True, db_index=True)
     created_at = models.DateTimeField(auto_now_add=True)
     
     class Meta:
@@ -125,6 +131,7 @@ class Resolution(models.Model):
             models.Index(fields=['market']),
             models.Index(fields=['resolved_outcome']),
             models.Index(fields=['-created_at']),
+            models.Index(fields=['onchain_tx_hash']),
         ]
     
     def __str__(self):
