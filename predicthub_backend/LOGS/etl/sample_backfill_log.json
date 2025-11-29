@@ -1,0 +1,24 @@
+{
+  "start_time": "2024-01-15T10:00:00.000Z",
+  "end_time": "2024-01-15T10:15:30.000Z",
+  "duration_seconds": 930,
+  "from_block": 5000000,
+  "to_block": 5010000,
+  "total_blocks": 10001,
+  "total_events_found": 245,
+  "total_events_processed": 243,
+  "events_by_type": {
+    "MarketCreated": 12,
+    "TradePlaced": 180,
+    "LiquidityAdded": 45,
+    "MarketResolved": 8
+  },
+  "duplicates_suppressed": 2,
+  "errors": [],
+  "processing_summary": {
+    "average_blocks_per_second": 10.75,
+    "average_events_per_block": 0.0245,
+    "success_rate": 0.9918
+  }
+}
+

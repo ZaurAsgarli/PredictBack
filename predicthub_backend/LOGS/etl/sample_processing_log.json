@@ -1,0 +1,28 @@
+{
+  "timestamp": "2024-01-15T14:30:00.000Z",
+  "event_type": "processing_summary",
+  "period": "last_hour",
+  "statistics": {
+    "events_received": 156,
+    "events_processed": 154,
+    "events_duplicate": 2,
+    "events_failed": 0,
+    "processing_delays_ms": {
+      "min": 45,
+      "max": 320,
+      "avg": 125,
+      "p95": 280
+    },
+    "etl_errors": [],
+    "duplicate_suppression_activity": {
+      "suppressed_count": 2,
+      "suppression_rate": 0.0128
+    }
+  },
+  "backfill_runtime_summary": {
+    "active_backfills": 0,
+    "last_backfill_completed": "2024-01-15T10:15:30.000Z",
+    "last_backfill_duration_seconds": 930
+  }
+}
+
