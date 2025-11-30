@@ -15,6 +15,9 @@ class DisputeViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
     
     def get_queryset(self):
+        # Handle Swagger schema generation (when user is anonymous)
+        if getattr(self, 'swagger_fake_view', False) or not self.request.user.is_authenticated:
+            return Dispute.objects.none()
         queryset = super().get_queryset()
         if not self.request.user.is_staff:
             queryset = queryset.filter(user=self.request.user)

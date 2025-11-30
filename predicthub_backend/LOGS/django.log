@@ -1925,3 +1925,973 @@ INFO 2025-11-29 17:22:43,261 basehttp "GET /api/trades/?market_id=3 HTTP/1.1" 20
 INFO 2025-11-29 17:22:43,264 middleware GET /api/trades/ - User: 
 INFO 2025-11-29 17:22:43,315 basehttp "GET /api/trades/?market_id=3 HTTP/1.1" 200 5706
 INFO 2025-11-29 17:49:42,675 autoreload Watching for file changes with StatReloader
+INFO 2025-11-29 19:00:05,893 autoreload Watching for file changes with StatReloader
+INFO 2025-11-29 19:04:20,544 middleware GET /admin/ - User: 
+INFO 2025-11-29 19:04:20,617 basehttp "GET /admin/ HTTP/1.1" 302 0
+INFO 2025-11-29 19:04:20,621 middleware GET /admin/login/ - User: 
+INFO 2025-11-29 19:04:20,677 basehttp "GET /admin/login/?next=/admin/ HTTP/1.1" 200 4170
+INFO 2025-11-29 19:04:20,862 middleware GET /favicon.ico - User: 
+WARNING 2025-11-29 19:04:20,870 log Not Found: /favicon.ico
+WARNING 2025-11-29 19:04:20,871 basehttp "GET /favicon.ico HTTP/1.1" 404 5259
+INFO 2025-11-29 19:04:25,200 middleware GET / - User: 
+INFO 2025-11-29 19:04:25,201 basehttp "GET / HTTP/1.1" 200 494
+INFO 2025-11-29 19:04:58,195 middleware GET /swagger - User: 
+INFO 2025-11-29 19:04:58,199 basehttp "GET /swagger HTTP/1.1" 301 0
+INFO 2025-11-29 19:04:58,203 middleware GET /swagger/ - User: 
+INFO 2025-11-29 19:04:58,207 basehttp "GET /swagger/ HTTP/1.1" 200 2161
+INFO 2025-11-29 19:04:58,260 basehttp "GET /static/drf-yasg/style.css HTTP/1.1" 200 1047
+INFO 2025-11-29 19:04:58,261 basehttp "GET /static/drf-yasg/insQ.min.js HTTP/1.1" 200 2093
+INFO 2025-11-29 19:04:58,268 basehttp "GET /static/drf-yasg/immutable.min.js HTTP/1.1" 200 56904
+INFO 2025-11-29 19:04:58,269 basehttp "GET /static/drf-yasg/swagger-ui-init.js HTTP/1.1" 200 14964
+INFO 2025-11-29 19:04:58,273 basehttp "GET /static/drf-yasg/swagger-ui-dist/swagger-ui.css HTTP/1.1" 200 145206
+INFO 2025-11-29 19:04:58,276 basehttp "GET /static/drf-yasg/swagger-ui-dist/swagger-ui-standalone-preset.js HTTP/1.1" 200 322863
+INFO 2025-11-29 19:04:58,281 basehttp "GET /static/drf-yasg/swagger-ui-dist/swagger-ui-bundle.js HTTP/1.1" 200 1046583
+INFO 2025-11-29 19:04:58,386 basehttp "GET /static/drf-yasg/swagger-ui-dist/favicon-32x32.png HTTP/1.1" 200 628
+INFO 2025-11-29 19:04:58,422 middleware GET /swagger/ - User: 
+WARNING 2025-11-29 19:04:58,428 base view's PositionViewSet raised exception during schema generation; use `getattr(self, 'swagger_fake_view', False)` to detect and short-circuit this
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/fields/__init__.py", line 2128, in get_prep_value
+    return int(value)
+           ^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/contrib/auth/models.py", line 549, in __int__
+    raise TypeError(
+TypeError: Cannot cast AnonymousUser to int. Are you trying to use it in place of User?
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.11/site-packages/drf_yasg/inspectors/base.py", line 42, in call_view_method
+    return view_method()
+           ^^^^^^^^^^^^^
+  File "/app/positions/views.py", line 15, in get_queryset
+    return super().get_queryset().filter(user=self.request.user)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/query.py", line 1495, in filter
+    return self._filter_or_exclude(False, args, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/query.py", line 1513, in _filter_or_exclude
+    clone._filter_or_exclude_inplace(negate, args, kwargs)
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/query.py", line 1523, in _filter_or_exclude_inplace
+    self._query.add_q(Q(*args, **kwargs))
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/sql/query.py", line 1646, in add_q
+    clause, _ = self._add_q(q_object, can_reuse)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/sql/query.py", line 1678, in _add_q
+    child_clause, needed_inner = self.build_filter(
+                                 ^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/sql/query.py", line 1588, in build_filter
+    condition = self.build_lookup(lookups, col, value)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/sql/query.py", line 1415, in build_lookup
+    lookup = lookup_class(lhs, rhs)
+             ^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/lookups.py", line 38, in __init__
+    self.rhs = self.get_prep_lookup()
+               ^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/fields/related_lookups.py", line 112, in get_prep_lookup
+    self.rhs = target_field.get_prep_value(self.rhs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/fields/__init__.py", line 2130, in get_prep_value
+    raise e.__class__(
+TypeError: Field 'id' expected a number but got <django.contrib.auth.models.AnonymousUser object at 0x7a46a1916bd0>.
+WARNING 2025-11-29 19:04:58,446 base view's DisputeViewSet raised exception during schema generation; use `getattr(self, 'swagger_fake_view', False)` to detect and short-circuit this
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/fields/__init__.py", line 2128, in get_prep_value
+    return int(value)
+           ^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/contrib/auth/models.py", line 549, in __int__
+    raise TypeError(
+TypeError: Cannot cast AnonymousUser to int. Are you trying to use it in place of User?
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.11/site-packages/drf_yasg/inspectors/base.py", line 42, in call_view_method
+    return view_method()
+           ^^^^^^^^^^^^^
+  File "/app/disputes/views.py", line 20, in get_queryset
+    queryset = queryset.filter(user=self.request.user)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/query.py", line 1495, in filter
+    return self._filter_or_exclude(False, args, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/query.py", line 1513, in _filter_or_exclude
+    clone._filter_or_exclude_inplace(negate, args, kwargs)
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/query.py", line 1523, in _filter_or_exclude_inplace
+    self._query.add_q(Q(*args, **kwargs))
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/sql/query.py", line 1646, in add_q
+    clause, _ = self._add_q(q_object, can_reuse)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/sql/query.py", line 1678, in _add_q
+    child_clause, needed_inner = self.build_filter(
+                                 ^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/sql/query.py", line 1588, in build_filter
+    condition = self.build_lookup(lookups, col, value)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/sql/query.py", line 1415, in build_lookup
+    lookup = lookup_class(lhs, rhs)
+             ^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/lookups.py", line 38, in __init__
+    self.rhs = self.get_prep_lookup()
+               ^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/fields/related_lookups.py", line 112, in get_prep_lookup
+    self.rhs = target_field.get_prep_value(self.rhs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/fields/__init__.py", line 2130, in get_prep_value
+    raise e.__class__(
+TypeError: Field 'id' expected a number but got <django.contrib.auth.models.AnonymousUser object at 0x7a46a1916bd0>.
+WARNING 2025-11-29 19:04:58,455 base view's DisputeViewSet raised exception during schema generation; use `getattr(self, 'swagger_fake_view', False)` to detect and short-circuit this
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/fields/__init__.py", line 2128, in get_prep_value
+    return int(value)
+           ^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/contrib/auth/models.py", line 549, in __int__
+    raise TypeError(
+TypeError: Cannot cast AnonymousUser to int. Are you trying to use it in place of User?
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.11/site-packages/drf_yasg/inspectors/base.py", line 42, in call_view_method
+    return view_method()
+           ^^^^^^^^^^^^^
+  File "/app/disputes/views.py", line 20, in get_queryset
+    queryset = queryset.filter(user=self.request.user)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/query.py", line 1495, in filter
+    return self._filter_or_exclude(False, args, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/query.py", line 1513, in _filter_or_exclude
+    clone._filter_or_exclude_inplace(negate, args, kwargs)
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/query.py", line 1523, in _filter_or_exclude_inplace
+    self._query.add_q(Q(*args, **kwargs))
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/sql/query.py", line 1646, in add_q
+    clause, _ = self._add_q(q_object, can_reuse)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/sql/query.py", line 1678, in _add_q
+    child_clause, needed_inner = self.build_filter(
+                                 ^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/sql/query.py", line 1588, in build_filter
+    condition = self.build_lookup(lookups, col, value)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/sql/query.py", line 1415, in build_lookup
+    lookup = lookup_class(lhs, rhs)
+             ^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/lookups.py", line 38, in __init__
+    self.rhs = self.get_prep_lookup()
+               ^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/fields/related_lookups.py", line 112, in get_prep_lookup
+    self.rhs = target_field.get_prep_value(self.rhs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/fields/__init__.py", line 2130, in get_prep_value
+    raise e.__class__(
+TypeError: Field 'id' expected a number but got <django.contrib.auth.models.AnonymousUser object at 0x7a46a1916bd0>.
+WARNING 2025-11-29 19:04:58,461 base view's DisputeViewSet raised exception during schema generation; use `getattr(self, 'swagger_fake_view', False)` to detect and short-circuit this
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/fields/__init__.py", line 2128, in get_prep_value
+    return int(value)
+           ^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/contrib/auth/models.py", line 549, in __int__
+    raise TypeError(
+TypeError: Cannot cast AnonymousUser to int. Are you trying to use it in place of User?
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.11/site-packages/drf_yasg/inspectors/base.py", line 42, in call_view_method
+    return view_method()
+           ^^^^^^^^^^^^^
+  File "/app/disputes/views.py", line 20, in get_queryset
+    queryset = queryset.filter(user=self.request.user)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/query.py", line 1495, in filter
+    return self._filter_or_exclude(False, args, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/query.py", line 1513, in _filter_or_exclude
+    clone._filter_or_exclude_inplace(negate, args, kwargs)
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/query.py", line 1523, in _filter_or_exclude_inplace
+    self._query.add_q(Q(*args, **kwargs))
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/sql/query.py", line 1646, in add_q
+    clause, _ = self._add_q(q_object, can_reuse)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/sql/query.py", line 1678, in _add_q
+    child_clause, needed_inner = self.build_filter(
+                                 ^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/sql/query.py", line 1588, in build_filter
+    condition = self.build_lookup(lookups, col, value)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/sql/query.py", line 1415, in build_lookup
+    lookup = lookup_class(lhs, rhs)
+             ^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/lookups.py", line 38, in __init__
+    self.rhs = self.get_prep_lookup()
+               ^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/fields/related_lookups.py", line 112, in get_prep_lookup
+    self.rhs = target_field.get_prep_value(self.rhs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/fields/__init__.py", line 2130, in get_prep_value
+    raise e.__class__(
+TypeError: Field 'id' expected a number but got <django.contrib.auth.models.AnonymousUser object at 0x7a46a1916bd0>.
+WARNING 2025-11-29 19:04:58,466 base view's DisputeViewSet raised exception during schema generation; use `getattr(self, 'swagger_fake_view', False)` to detect and short-circuit this
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/fields/__init__.py", line 2128, in get_prep_value
+    return int(value)
+           ^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/contrib/auth/models.py", line 549, in __int__
+    raise TypeError(
+TypeError: Cannot cast AnonymousUser to int. Are you trying to use it in place of User?
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.11/site-packages/drf_yasg/inspectors/base.py", line 42, in call_view_method
+    return view_method()
+           ^^^^^^^^^^^^^
+  File "/app/disputes/views.py", line 20, in get_queryset
+    queryset = queryset.filter(user=self.request.user)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/query.py", line 1495, in filter
+    return self._filter_or_exclude(False, args, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/query.py", line 1513, in _filter_or_exclude
+    clone._filter_or_exclude_inplace(negate, args, kwargs)
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/query.py", line 1523, in _filter_or_exclude_inplace
+    self._query.add_q(Q(*args, **kwargs))
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/sql/query.py", line 1646, in add_q
+    clause, _ = self._add_q(q_object, can_reuse)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/sql/query.py", line 1678, in _add_q
+    child_clause, needed_inner = self.build_filter(
+                                 ^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/sql/query.py", line 1588, in build_filter
+    condition = self.build_lookup(lookups, col, value)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/sql/query.py", line 1415, in build_lookup
+    lookup = lookup_class(lhs, rhs)
+             ^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/lookups.py", line 38, in __init__
+    self.rhs = self.get_prep_lookup()
+               ^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/fields/related_lookups.py", line 112, in get_prep_lookup
+    self.rhs = target_field.get_prep_value(self.rhs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/fields/__init__.py", line 2130, in get_prep_value
+    raise e.__class__(
+TypeError: Field 'id' expected a number but got <django.contrib.auth.models.AnonymousUser object at 0x7a46a1916bd0>.
+WARNING 2025-11-29 19:04:58,470 base view's DisputeViewSet raised exception during schema generation; use `getattr(self, 'swagger_fake_view', False)` to detect and short-circuit this
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/fields/__init__.py", line 2128, in get_prep_value
+    return int(value)
+           ^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/contrib/auth/models.py", line 549, in __int__
+    raise TypeError(
+TypeError: Cannot cast AnonymousUser to int. Are you trying to use it in place of User?
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.11/site-packages/drf_yasg/inspectors/base.py", line 42, in call_view_method
+    return view_method()
+           ^^^^^^^^^^^^^
+  File "/app/disputes/views.py", line 20, in get_queryset
+    queryset = queryset.filter(user=self.request.user)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/query.py", line 1495, in filter
+    return self._filter_or_exclude(False, args, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/query.py", line 1513, in _filter_or_exclude
+    clone._filter_or_exclude_inplace(negate, args, kwargs)
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/query.py", line 1523, in _filter_or_exclude_inplace
+    self._query.add_q(Q(*args, **kwargs))
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/sql/query.py", line 1646, in add_q
+    clause, _ = self._add_q(q_object, can_reuse)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/sql/query.py", line 1678, in _add_q
+    child_clause, needed_inner = self.build_filter(
+                                 ^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/sql/query.py", line 1588, in build_filter
+    condition = self.build_lookup(lookups, col, value)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/sql/query.py", line 1415, in build_lookup
+    lookup = lookup_class(lhs, rhs)
+             ^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/lookups.py", line 38, in __init__
+    self.rhs = self.get_prep_lookup()
+               ^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/fields/related_lookups.py", line 112, in get_prep_lookup
+    self.rhs = target_field.get_prep_value(self.rhs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/fields/__init__.py", line 2130, in get_prep_value
+    raise e.__class__(
+TypeError: Field 'id' expected a number but got <django.contrib.auth.models.AnonymousUser object at 0x7a46a1916bd0>.
+WARNING 2025-11-29 19:04:58,474 base view's DisputeViewSet raised exception during schema generation; use `getattr(self, 'swagger_fake_view', False)` to detect and short-circuit this
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/fields/__init__.py", line 2128, in get_prep_value
+    return int(value)
+           ^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/contrib/auth/models.py", line 549, in __int__
+    raise TypeError(
+TypeError: Cannot cast AnonymousUser to int. Are you trying to use it in place of User?
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.11/site-packages/drf_yasg/inspectors/base.py", line 42, in call_view_method
+    return view_method()
+           ^^^^^^^^^^^^^
+  File "/app/disputes/views.py", line 20, in get_queryset
+    queryset = queryset.filter(user=self.request.user)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/query.py", line 1495, in filter
+    return self._filter_or_exclude(False, args, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/query.py", line 1513, in _filter_or_exclude
+    clone._filter_or_exclude_inplace(negate, args, kwargs)
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/query.py", line 1523, in _filter_or_exclude_inplace
+    self._query.add_q(Q(*args, **kwargs))
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/sql/query.py", line 1646, in add_q
+    clause, _ = self._add_q(q_object, can_reuse)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/sql/query.py", line 1678, in _add_q
+    child_clause, needed_inner = self.build_filter(
+                                 ^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/sql/query.py", line 1588, in build_filter
+    condition = self.build_lookup(lookups, col, value)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/sql/query.py", line 1415, in build_lookup
+    lookup = lookup_class(lhs, rhs)
+             ^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/lookups.py", line 38, in __init__
+    self.rhs = self.get_prep_lookup()
+               ^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/fields/related_lookups.py", line 112, in get_prep_lookup
+    self.rhs = target_field.get_prep_value(self.rhs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/fields/__init__.py", line 2130, in get_prep_value
+    raise e.__class__(
+TypeError: Field 'id' expected a number but got <django.contrib.auth.models.AnonymousUser object at 0x7a46a1916bd0>.
+INFO 2025-11-29 19:04:58,504 basehttp "GET /swagger/?format=openapi HTTP/1.1" 200 24786
+INFO 2025-11-29 19:05:29,873 middleware GET /api/trades - User: 
+INFO 2025-11-29 19:05:29,877 basehttp "GET /api/trades HTTP/1.1" 301 0
+INFO 2025-11-29 19:05:29,882 middleware GET /api/trades/ - User: 
+WARNING 2025-11-29 19:05:29,893 log Unauthorized: /api/trades/
+WARNING 2025-11-29 19:05:29,895 basehttp "GET /api/trades/ HTTP/1.1" 401 5062
+INFO 2025-11-29 19:05:34,322 middleware GET /api/trades/ - User: 
+WARNING 2025-11-29 19:05:34,326 log Unauthorized: /api/trades/
+WARNING 2025-11-29 19:05:34,327 basehttp "GET /api/trades/ HTTP/1.1" 401 5062
+INFO 2025-11-29 19:06:43,168 middleware GET /api/trades/ - User: 
+WARNING 2025-11-29 19:06:43,171 log Unauthorized: /api/trades/
+WARNING 2025-11-29 19:06:43,172 basehttp "GET /api/trades/ HTTP/1.1" 401 5062
+INFO 2025-11-29 19:06:43,751 middleware GET /api/trades/ - User: 
+WARNING 2025-11-29 19:06:43,754 log Unauthorized: /api/trades/
+WARNING 2025-11-29 19:06:43,755 basehttp "GET /api/trades/ HTTP/1.1" 401 5062
+INFO 2025-11-29 19:06:43,936 middleware GET /api/trades/ - User: 
+WARNING 2025-11-29 19:06:43,939 log Unauthorized: /api/trades/
+WARNING 2025-11-29 19:06:43,940 basehttp "GET /api/trades/ HTTP/1.1" 401 5062
+INFO 2025-11-29 19:06:44,127 middleware GET /api/trades/ - User: 
+WARNING 2025-11-29 19:06:44,130 log Unauthorized: /api/trades/
+WARNING 2025-11-29 19:06:44,131 basehttp "GET /api/trades/ HTTP/1.1" 401 5062
+INFO 2025-11-29 19:06:44,296 middleware GET /api/trades/ - User: 
+WARNING 2025-11-29 19:06:44,299 log Unauthorized: /api/trades/
+WARNING 2025-11-29 19:06:44,299 basehttp "GET /api/trades/ HTTP/1.1" 401 5062
+INFO 2025-11-29 19:06:44,463 middleware GET /api/trades/ - User: 
+WARNING 2025-11-29 19:06:44,466 log Unauthorized: /api/trades/
+WARNING 2025-11-29 19:06:44,467 basehttp "GET /api/trades/ HTTP/1.1" 401 5062
+INFO 2025-11-29 19:06:44,629 middleware GET /api/trades/ - User: 
+WARNING 2025-11-29 19:06:44,632 log Unauthorized: /api/trades/
+WARNING 2025-11-29 19:06:44,633 basehttp "GET /api/trades/ HTTP/1.1" 401 5062
+INFO 2025-11-29 19:06:50,298 middleware GET /swwagger - User: 
+WARNING 2025-11-29 19:06:50,301 log Not Found: /swwagger
+WARNING 2025-11-29 19:06:50,302 basehttp "GET /swwagger HTTP/1.1" 404 5250
+INFO 2025-11-29 19:06:54,811 middleware GET /swagger/ - User: 
+INFO 2025-11-29 19:06:54,813 basehttp "GET /swagger/ HTTP/1.1" 200 2161
+INFO 2025-11-29 19:06:54,969 middleware GET /swagger/ - User: 
+WARNING 2025-11-29 19:06:54,975 base view's PositionViewSet raised exception during schema generation; use `getattr(self, 'swagger_fake_view', False)` to detect and short-circuit this
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/fields/__init__.py", line 2128, in get_prep_value
+    return int(value)
+           ^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/contrib/auth/models.py", line 549, in __int__
+    raise TypeError(
+TypeError: Cannot cast AnonymousUser to int. Are you trying to use it in place of User?
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.11/site-packages/drf_yasg/inspectors/base.py", line 42, in call_view_method
+    return view_method()
+           ^^^^^^^^^^^^^
+  File "/app/positions/views.py", line 15, in get_queryset
+    return super().get_queryset().filter(user=self.request.user)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/query.py", line 1495, in filter
+    return self._filter_or_exclude(False, args, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/query.py", line 1513, in _filter_or_exclude
+    clone._filter_or_exclude_inplace(negate, args, kwargs)
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/query.py", line 1523, in _filter_or_exclude_inplace
+    self._query.add_q(Q(*args, **kwargs))
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/sql/query.py", line 1646, in add_q
+    clause, _ = self._add_q(q_object, can_reuse)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/sql/query.py", line 1678, in _add_q
+    child_clause, needed_inner = self.build_filter(
+                                 ^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/sql/query.py", line 1588, in build_filter
+    condition = self.build_lookup(lookups, col, value)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/sql/query.py", line 1415, in build_lookup
+    lookup = lookup_class(lhs, rhs)
+             ^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/lookups.py", line 38, in __init__
+    self.rhs = self.get_prep_lookup()
+               ^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/fields/related_lookups.py", line 112, in get_prep_lookup
+    self.rhs = target_field.get_prep_value(self.rhs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/fields/__init__.py", line 2130, in get_prep_value
+    raise e.__class__(
+TypeError: Field 'id' expected a number but got <django.contrib.auth.models.AnonymousUser object at 0x7a468b728550>.
+WARNING 2025-11-29 19:06:54,979 base view's DisputeViewSet raised exception during schema generation; use `getattr(self, 'swagger_fake_view', False)` to detect and short-circuit this
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/fields/__init__.py", line 2128, in get_prep_value
+    return int(value)
+           ^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/contrib/auth/models.py", line 549, in __int__
+    raise TypeError(
+TypeError: Cannot cast AnonymousUser to int. Are you trying to use it in place of User?
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.11/site-packages/drf_yasg/inspectors/base.py", line 42, in call_view_method
+    return view_method()
+           ^^^^^^^^^^^^^
+  File "/app/disputes/views.py", line 20, in get_queryset
+    queryset = queryset.filter(user=self.request.user)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/query.py", line 1495, in filter
+    return self._filter_or_exclude(False, args, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/query.py", line 1513, in _filter_or_exclude
+    clone._filter_or_exclude_inplace(negate, args, kwargs)
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/query.py", line 1523, in _filter_or_exclude_inplace
+    self._query.add_q(Q(*args, **kwargs))
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/sql/query.py", line 1646, in add_q
+    clause, _ = self._add_q(q_object, can_reuse)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/sql/query.py", line 1678, in _add_q
+    child_clause, needed_inner = self.build_filter(
+                                 ^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/sql/query.py", line 1588, in build_filter
+    condition = self.build_lookup(lookups, col, value)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/sql/query.py", line 1415, in build_lookup
+    lookup = lookup_class(lhs, rhs)
+             ^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/lookups.py", line 38, in __init__
+    self.rhs = self.get_prep_lookup()
+               ^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/fields/related_lookups.py", line 112, in get_prep_lookup
+    self.rhs = target_field.get_prep_value(self.rhs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/fields/__init__.py", line 2130, in get_prep_value
+    raise e.__class__(
+TypeError: Field 'id' expected a number but got <django.contrib.auth.models.AnonymousUser object at 0x7a468b728550>.
+WARNING 2025-11-29 19:06:54,984 base view's DisputeViewSet raised exception during schema generation; use `getattr(self, 'swagger_fake_view', False)` to detect and short-circuit this
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/fields/__init__.py", line 2128, in get_prep_value
+    return int(value)
+           ^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/contrib/auth/models.py", line 549, in __int__
+    raise TypeError(
+TypeError: Cannot cast AnonymousUser to int. Are you trying to use it in place of User?
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.11/site-packages/drf_yasg/inspectors/base.py", line 42, in call_view_method
+    return view_method()
+           ^^^^^^^^^^^^^
+  File "/app/disputes/views.py", line 20, in get_queryset
+    queryset = queryset.filter(user=self.request.user)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/query.py", line 1495, in filter
+    return self._filter_or_exclude(False, args, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/query.py", line 1513, in _filter_or_exclude
+    clone._filter_or_exclude_inplace(negate, args, kwargs)
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/query.py", line 1523, in _filter_or_exclude_inplace
+    self._query.add_q(Q(*args, **kwargs))
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/sql/query.py", line 1646, in add_q
+    clause, _ = self._add_q(q_object, can_reuse)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/sql/query.py", line 1678, in _add_q
+    child_clause, needed_inner = self.build_filter(
+                                 ^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/sql/query.py", line 1588, in build_filter
+    condition = self.build_lookup(lookups, col, value)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/sql/query.py", line 1415, in build_lookup
+    lookup = lookup_class(lhs, rhs)
+             ^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/lookups.py", line 38, in __init__
+    self.rhs = self.get_prep_lookup()
+               ^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/fields/related_lookups.py", line 112, in get_prep_lookup
+    self.rhs = target_field.get_prep_value(self.rhs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/fields/__init__.py", line 2130, in get_prep_value
+    raise e.__class__(
+TypeError: Field 'id' expected a number but got <django.contrib.auth.models.AnonymousUser object at 0x7a468b728550>.
+WARNING 2025-11-29 19:06:54,991 base view's DisputeViewSet raised exception during schema generation; use `getattr(self, 'swagger_fake_view', False)` to detect and short-circuit this
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/fields/__init__.py", line 2128, in get_prep_value
+    return int(value)
+           ^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/contrib/auth/models.py", line 549, in __int__
+    raise TypeError(
+TypeError: Cannot cast AnonymousUser to int. Are you trying to use it in place of User?
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.11/site-packages/drf_yasg/inspectors/base.py", line 42, in call_view_method
+    return view_method()
+           ^^^^^^^^^^^^^
+  File "/app/disputes/views.py", line 20, in get_queryset
+    queryset = queryset.filter(user=self.request.user)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/query.py", line 1495, in filter
+    return self._filter_or_exclude(False, args, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/query.py", line 1513, in _filter_or_exclude
+    clone._filter_or_exclude_inplace(negate, args, kwargs)
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/query.py", line 1523, in _filter_or_exclude_inplace
+    self._query.add_q(Q(*args, **kwargs))
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/sql/query.py", line 1646, in add_q
+    clause, _ = self._add_q(q_object, can_reuse)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/sql/query.py", line 1678, in _add_q
+    child_clause, needed_inner = self.build_filter(
+                                 ^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/sql/query.py", line 1588, in build_filter
+    condition = self.build_lookup(lookups, col, value)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/sql/query.py", line 1415, in build_lookup
+    lookup = lookup_class(lhs, rhs)
+             ^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/lookups.py", line 38, in __init__
+    self.rhs = self.get_prep_lookup()
+               ^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/fields/related_lookups.py", line 112, in get_prep_lookup
+    self.rhs = target_field.get_prep_value(self.rhs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/fields/__init__.py", line 2130, in get_prep_value
+    raise e.__class__(
+TypeError: Field 'id' expected a number but got <django.contrib.auth.models.AnonymousUser object at 0x7a468b728550>.
+WARNING 2025-11-29 19:06:54,996 base view's DisputeViewSet raised exception during schema generation; use `getattr(self, 'swagger_fake_view', False)` to detect and short-circuit this
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/fields/__init__.py", line 2128, in get_prep_value
+    return int(value)
+           ^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/contrib/auth/models.py", line 549, in __int__
+    raise TypeError(
+TypeError: Cannot cast AnonymousUser to int. Are you trying to use it in place of User?
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.11/site-packages/drf_yasg/inspectors/base.py", line 42, in call_view_method
+    return view_method()
+           ^^^^^^^^^^^^^
+  File "/app/disputes/views.py", line 20, in get_queryset
+    queryset = queryset.filter(user=self.request.user)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/query.py", line 1495, in filter
+    return self._filter_or_exclude(False, args, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/query.py", line 1513, in _filter_or_exclude
+    clone._filter_or_exclude_inplace(negate, args, kwargs)
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/query.py", line 1523, in _filter_or_exclude_inplace
+    self._query.add_q(Q(*args, **kwargs))
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/sql/query.py", line 1646, in add_q
+    clause, _ = self._add_q(q_object, can_reuse)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/sql/query.py", line 1678, in _add_q
+    child_clause, needed_inner = self.build_filter(
+                                 ^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/sql/query.py", line 1588, in build_filter
+    condition = self.build_lookup(lookups, col, value)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/sql/query.py", line 1415, in build_lookup
+    lookup = lookup_class(lhs, rhs)
+             ^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/lookups.py", line 38, in __init__
+    self.rhs = self.get_prep_lookup()
+               ^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/fields/related_lookups.py", line 112, in get_prep_lookup
+    self.rhs = target_field.get_prep_value(self.rhs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/fields/__init__.py", line 2130, in get_prep_value
+    raise e.__class__(
+TypeError: Field 'id' expected a number but got <django.contrib.auth.models.AnonymousUser object at 0x7a468b728550>.
+WARNING 2025-11-29 19:06:55,000 base view's DisputeViewSet raised exception during schema generation; use `getattr(self, 'swagger_fake_view', False)` to detect and short-circuit this
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/fields/__init__.py", line 2128, in get_prep_value
+    return int(value)
+           ^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/contrib/auth/models.py", line 549, in __int__
+    raise TypeError(
+TypeError: Cannot cast AnonymousUser to int. Are you trying to use it in place of User?
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.11/site-packages/drf_yasg/inspectors/base.py", line 42, in call_view_method
+    return view_method()
+           ^^^^^^^^^^^^^
+  File "/app/disputes/views.py", line 20, in get_queryset
+    queryset = queryset.filter(user=self.request.user)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/query.py", line 1495, in filter
+    return self._filter_or_exclude(False, args, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/query.py", line 1513, in _filter_or_exclude
+    clone._filter_or_exclude_inplace(negate, args, kwargs)
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/query.py", line 1523, in _filter_or_exclude_inplace
+    self._query.add_q(Q(*args, **kwargs))
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/sql/query.py", line 1646, in add_q
+    clause, _ = self._add_q(q_object, can_reuse)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/sql/query.py", line 1678, in _add_q
+    child_clause, needed_inner = self.build_filter(
+                                 ^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/sql/query.py", line 1588, in build_filter
+    condition = self.build_lookup(lookups, col, value)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/sql/query.py", line 1415, in build_lookup
+    lookup = lookup_class(lhs, rhs)
+             ^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/lookups.py", line 38, in __init__
+    self.rhs = self.get_prep_lookup()
+               ^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/fields/related_lookups.py", line 112, in get_prep_lookup
+    self.rhs = target_field.get_prep_value(self.rhs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/fields/__init__.py", line 2130, in get_prep_value
+    raise e.__class__(
+TypeError: Field 'id' expected a number but got <django.contrib.auth.models.AnonymousUser object at 0x7a468b728550>.
+WARNING 2025-11-29 19:06:55,004 base view's DisputeViewSet raised exception during schema generation; use `getattr(self, 'swagger_fake_view', False)` to detect and short-circuit this
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/fields/__init__.py", line 2128, in get_prep_value
+    return int(value)
+           ^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/contrib/auth/models.py", line 549, in __int__
+    raise TypeError(
+TypeError: Cannot cast AnonymousUser to int. Are you trying to use it in place of User?
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.11/site-packages/drf_yasg/inspectors/base.py", line 42, in call_view_method
+    return view_method()
+           ^^^^^^^^^^^^^
+  File "/app/disputes/views.py", line 20, in get_queryset
+    queryset = queryset.filter(user=self.request.user)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/query.py", line 1495, in filter
+    return self._filter_or_exclude(False, args, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/query.py", line 1513, in _filter_or_exclude
+    clone._filter_or_exclude_inplace(negate, args, kwargs)
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/query.py", line 1523, in _filter_or_exclude_inplace
+    self._query.add_q(Q(*args, **kwargs))
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/sql/query.py", line 1646, in add_q
+    clause, _ = self._add_q(q_object, can_reuse)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/sql/query.py", line 1678, in _add_q
+    child_clause, needed_inner = self.build_filter(
+                                 ^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/sql/query.py", line 1588, in build_filter
+    condition = self.build_lookup(lookups, col, value)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/sql/query.py", line 1415, in build_lookup
+    lookup = lookup_class(lhs, rhs)
+             ^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/lookups.py", line 38, in __init__
+    self.rhs = self.get_prep_lookup()
+               ^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/fields/related_lookups.py", line 112, in get_prep_lookup
+    self.rhs = target_field.get_prep_value(self.rhs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/db/models/fields/__init__.py", line 2130, in get_prep_value
+    raise e.__class__(
+TypeError: Field 'id' expected a number but got <django.contrib.auth.models.AnonymousUser object at 0x7a468b728550>.
+INFO 2025-11-29 19:06:55,028 basehttp "GET /swagger/?format=openapi HTTP/1.1" 200 24786
+INFO 2025-11-29 19:08:41,261 middleware GET /api/markets/ - User: 
+INFO 2025-11-29 19:08:41,353 basehttp "GET /api/markets/ HTTP/1.1" 200 27695
+INFO 2025-11-29 19:09:07,212 autoreload /app/positions/views.py changed, reloading.
+INFO 2025-11-29 19:09:11,785 autoreload Watching for file changes with StatReloader
+INFO 2025-11-29 19:10:00,898 autoreload /app/positions/views.py changed, reloading.
+INFO 2025-11-29 19:10:03,374 autoreload Watching for file changes with StatReloader
+INFO 2025-11-29 19:10:13,010 middleware GET /admin/ - User: adminpred
+INFO 2025-11-29 19:10:13,248 basehttp "GET /admin/ HTTP/1.1" 200 16771
+INFO 2025-11-29 19:10:13,601 middleware GET /favicon.ico - User: adminpred
+WARNING 2025-11-29 19:10:13,608 log Not Found: /favicon.ico
+WARNING 2025-11-29 19:10:13,609 basehttp "GET /favicon.ico HTTP/1.1" 404 5259
+INFO 2025-11-29 19:10:17,731 middleware GET /admin/ - User: adminpred
+INFO 2025-11-29 19:10:17,744 basehttp "GET /admin/ HTTP/1.1" 200 16771
+INFO 2025-11-29 19:10:19,739 middleware GET /admin/trades/trade/ - User: adminpred
+INFO 2025-11-29 19:10:19,864 basehttp "GET /admin/trades/trade/ HTTP/1.1" 200 82375
+INFO 2025-11-29 19:10:19,892 middleware GET /admin/jsi18n/ - User: adminpred
+INFO 2025-11-29 19:10:19,899 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2025-11-29 19:10:24,572 middleware GET /admin/markets/market/ - User: adminpred
+INFO 2025-11-29 19:10:24,598 basehttp "GET /admin/markets/market/ HTTP/1.1" 200 28083
+INFO 2025-11-29 19:10:24,624 middleware GET /admin/jsi18n/ - User: adminpred
+INFO 2025-11-29 19:10:24,626 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2025-11-29 19:10:34,108 middleware GET /api/markets - User: adminpred
+INFO 2025-11-29 19:10:34,113 basehttp "GET /api/markets HTTP/1.1" 301 0
+INFO 2025-11-29 19:10:34,131 middleware GET /api/markets/ - User: adminpred
+INFO 2025-11-29 19:10:34,194 basehttp "GET /api/markets/ HTTP/1.1" 200 27695
+INFO 2025-11-29 19:10:34,211 basehttp "GET /static/rest_framework/css/bootstrap.min.css HTTP/1.1" 304 0
+INFO 2025-11-29 19:10:34,213 basehttp "GET /static/rest_framework/css/bootstrap-tweaks.css HTTP/1.1" 304 0
+INFO 2025-11-29 19:10:34,215 basehttp "GET /static/rest_framework/css/prettify.css HTTP/1.1" 304 0
+INFO 2025-11-29 19:10:34,220 basehttp "GET /static/rest_framework/css/default.css HTTP/1.1" 304 0
+INFO 2025-11-29 19:10:34,221 basehttp "GET /static/rest_framework/js/csrf.js HTTP/1.1" 304 0
+INFO 2025-11-29 19:10:34,223 basehttp "GET /static/rest_framework/js/jquery-3.7.1.min.js HTTP/1.1" 304 0
+INFO 2025-11-29 19:10:34,223 basehttp "GET /static/rest_framework/js/ajax-form.js HTTP/1.1" 304 0
+INFO 2025-11-29 19:10:34,226 basehttp "GET /static/rest_framework/js/bootstrap.min.js HTTP/1.1" 304 0
+INFO 2025-11-29 19:10:34,227 basehttp "GET /static/rest_framework/js/prettify-min.js HTTP/1.1" 304 0
+INFO 2025-11-29 19:10:34,228 basehttp "GET /static/rest_framework/js/default.js HTTP/1.1" 304 0
+INFO 2025-11-29 19:10:34,229 basehttp "GET /static/rest_framework/js/load-ajax-form.js HTTP/1.1" 304 0
+INFO 2025-11-29 19:10:34,258 basehttp "GET /static/rest_framework/img/grid.png HTTP/1.1" 304 0
+INFO 2025-11-29 19:10:43,357 middleware GET /api/trades - User: adminpred
+INFO 2025-11-29 19:10:43,363 basehttp "GET /api/trades HTTP/1.1" 301 0
+INFO 2025-11-29 19:10:43,378 middleware GET /api/trades/ - User: adminpred
+WARNING 2025-11-29 19:10:43,381 log Unauthorized: /api/trades/
+WARNING 2025-11-29 19:10:43,382 basehttp "GET /api/trades/ HTTP/1.1" 401 5062
+INFO 2025-11-29 19:17:02,125 middleware GET / - User: 
+INFO 2025-11-29 19:17:02,127 basehttp "GET / HTTP/1.1" 200 494
+INFO 2025-11-29 19:17:02,309 middleware GET /favicon.ico - User: 
+WARNING 2025-11-29 19:17:02,313 log Not Found: /favicon.ico
+WARNING 2025-11-29 19:17:02,313 basehttp "GET /favicon.ico HTTP/1.1" 404 5259
+INFO 2025-11-29 19:17:09,609 middleware GET /api/trades/ - User: 
+WARNING 2025-11-29 19:17:09,613 log Unauthorized: /api/trades/
+WARNING 2025-11-29 19:17:09,615 basehttp "GET /api/trades/ HTTP/1.1" 401 5062
+INFO 2025-11-29 19:17:15,979 middleware GET /admin/ - User: 
+INFO 2025-11-29 19:17:15,980 basehttp "GET /admin/ HTTP/1.1" 302 0
+INFO 2025-11-29 19:17:15,985 middleware GET /admin/login/ - User: 
+INFO 2025-11-29 19:17:15,994 basehttp "GET /admin/login/?next=/admin/ HTTP/1.1" 200 4170
+INFO 2025-11-29 19:17:26,197 middleware POST /admin/login/ - User: 
+INFO 2025-11-29 19:17:26,362 basehttp "POST /admin/login/?next=/admin/ HTTP/1.1" 200 4345
+INFO 2025-11-29 19:17:30,174 middleware POST /admin/login/ - User: 
+INFO 2025-11-29 19:17:30,336 basehttp "POST /admin/login/?next=/admin/ HTTP/1.1" 302 0
+INFO 2025-11-29 19:17:30,347 middleware GET /admin/ - User: adminpred
+INFO 2025-11-29 19:17:30,356 basehttp "GET /admin/ HTTP/1.1" 200 16771
+INFO 2025-11-29 19:17:30,382 basehttp "GET /static/admin/css/dashboard.css HTTP/1.1" 200 441
+INFO 2025-11-29 19:17:30,431 basehttp "GET /static/admin/img/icon-addlink.svg HTTP/1.1" 200 331
+INFO 2025-11-29 19:17:30,432 basehttp "GET /static/admin/img/icon-changelink.svg HTTP/1.1" 200 380
+INFO 2025-11-29 19:17:40,878 middleware GET /admin/trades/trade/ - User: adminpred
+INFO 2025-11-29 19:17:40,945 basehttp "GET /admin/trades/trade/ HTTP/1.1" 200 82372
+INFO 2025-11-29 19:17:40,967 basehttp "GET /static/admin/css/changelists.css HTTP/1.1" 200 6878
+INFO 2025-11-29 19:17:40,979 basehttp "GET /static/admin/js/admin/RelatedObjectLookups.js HTTP/1.1" 200 9777
+INFO 2025-11-29 19:17:40,984 basehttp "GET /static/admin/js/jquery.init.js HTTP/1.1" 200 347
+INFO 2025-11-29 19:17:40,988 basehttp "GET /static/admin/js/core.js HTTP/1.1" 200 6208
+INFO 2025-11-29 19:17:40,989 basehttp "GET /static/admin/js/actions.js HTTP/1.1" 200 8076
+INFO 2025-11-29 19:17:40,989 basehttp "GET /static/admin/js/urlify.js HTTP/1.1" 200 7887
+INFO 2025-11-29 19:17:40,993 basehttp "GET /static/admin/js/prepopulate.js HTTP/1.1" 200 1531
+INFO 2025-11-29 19:17:40,995 middleware GET /admin/jsi18n/ - User: adminpred
+INFO 2025-11-29 19:17:40,997 basehttp "GET /static/admin/img/search.svg HTTP/1.1" 200 458
+INFO 2025-11-29 19:17:41,003 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2025-11-29 19:17:41,009 basehttp "GET /static/admin/js/vendor/jquery/jquery.js HTTP/1.1" 200 285314
+INFO 2025-11-29 19:17:41,009 basehttp "GET /static/admin/js/vendor/xregexp/xregexp.js HTTP/1.1" 200 325171
+INFO 2025-11-29 19:17:41,031 basehttp "GET /static/admin/js/filters.js HTTP/1.1" 200 978
+INFO 2025-11-29 19:17:41,069 basehttp "GET /static/admin/img/tooltag-add.svg HTTP/1.1" 200 331
+INFO 2025-11-29 19:17:41,070 basehttp "GET /static/admin/img/sorting-icons.svg HTTP/1.1" 200 1097
+INFO 2025-11-29 19:17:41,072 basehttp "GET /static/admin/img/icon-viewlink.svg HTTP/1.1" 200 581
+INFO 2025-11-29 19:17:53,110 middleware GET /admin/trades/trade/ - User: adminpred
+INFO 2025-11-29 19:17:53,174 basehttp "GET /admin/trades/trade/?o=2.-7 HTTP/1.1" 200 86062
+INFO 2025-11-29 19:17:53,207 middleware GET /admin/jsi18n/ - User: adminpred
+INFO 2025-11-29 19:17:53,209 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2025-11-29 19:17:57,451 middleware GET /admin/trades/trade/ - User: adminpred
+INFO 2025-11-29 19:17:57,481 basehttp "GET /admin/trades/trade/?o=2.-7&p=41 HTTP/1.1" 200 24975
+INFO 2025-11-29 19:17:57,513 middleware GET /admin/jsi18n/ - User: adminpred
+INFO 2025-11-29 19:17:57,516 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2025-11-29 19:18:01,024 middleware GET /admin/trades/trade/ - User: adminpred
+INFO 2025-11-29 19:18:01,087 basehttp "GET /admin/trades/trade/?o=2.-7&p=2 HTTP/1.1" 200 87012
+INFO 2025-11-29 19:18:01,123 middleware GET /admin/jsi18n/ - User: adminpred
+INFO 2025-11-29 19:18:01,125 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2025-11-29 19:18:06,048 middleware GET /admin/trades/trade/3734/change/ - User: adminpred
+INFO 2025-11-29 19:18:06,099 basehttp "GET /admin/trades/trade/3734/change/?_changelist_filters=o%3D2.-7%26p%3D2 HTTP/1.1" 200 28430
+INFO 2025-11-29 19:18:06,132 basehttp "GET /static/admin/css/forms.css HTTP/1.1" 200 8525
+INFO 2025-11-29 19:18:06,134 basehttp "GET /static/admin/js/prepopulate_init.js HTTP/1.1" 200 586
+INFO 2025-11-29 19:18:06,144 middleware GET /admin/jsi18n/ - User: adminpred
+INFO 2025-11-29 19:18:06,146 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2025-11-29 19:18:06,162 basehttp "GET /static/admin/js/change_form.js HTTP/1.1" 200 606
+INFO 2025-11-29 19:18:06,180 basehttp "GET /static/admin/css/widgets.css HTTP/1.1" 200 11973
+INFO 2025-11-29 19:18:11,761 middleware GET /admin/markets/market/ - User: adminpred
+INFO 2025-11-29 19:18:11,784 basehttp "GET /admin/markets/market/ HTTP/1.1" 200 28083
+INFO 2025-11-29 19:18:11,815 middleware GET /admin/jsi18n/ - User: adminpred
+INFO 2025-11-29 19:18:11,817 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2025-11-29 19:18:15,091 middleware GET /admin/indexer/onchaineventlog/ - User: adminpred
+INFO 2025-11-29 19:18:15,111 basehttp "GET /admin/indexer/onchaineventlog/ HTTP/1.1" 200 22638
+INFO 2025-11-29 19:18:15,135 basehttp "GET /static/admin/img/icon-no.svg HTTP/1.1" 200 560
+INFO 2025-11-29 19:18:15,143 middleware GET /admin/jsi18n/ - User: adminpred
+INFO 2025-11-29 19:18:15,144 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2025-11-29 19:18:17,775 middleware GET /admin/indexer/onchaintransaction/ - User: adminpred
+INFO 2025-11-29 19:18:17,794 basehttp "GET /admin/indexer/onchaintransaction/ HTTP/1.1" 200 21206
+INFO 2025-11-29 19:18:17,826 middleware GET /admin/jsi18n/ - User: adminpred
+INFO 2025-11-29 19:18:17,828 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2025-11-29 19:18:19,125 middleware GET /admin/liquidity/liquidityevent/ - User: adminpred
+INFO 2025-11-29 19:18:19,155 basehttp "GET /admin/liquidity/liquidityevent/ HTTP/1.1" 200 21913
+INFO 2025-11-29 19:18:19,326 middleware GET /admin/jsi18n/ - User: adminpred
+INFO 2025-11-29 19:18:19,327 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2025-11-29 19:18:23,711 middleware GET /admin/markets/outcometoken/ - User: adminpred
+INFO 2025-11-29 19:18:23,730 basehttp "GET /admin/markets/outcometoken/ HTTP/1.1" 200 23495
+INFO 2025-11-29 19:18:23,761 middleware GET /admin/jsi18n/ - User: adminpred
+INFO 2025-11-29 19:18:23,764 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2025-11-29 19:18:28,869 middleware GET /admin/markets/pricehistory/ - User: adminpred
+INFO 2025-11-29 19:18:28,893 basehttp "GET /admin/markets/pricehistory/ HTTP/1.1" 200 29376
+INFO 2025-11-29 19:18:28,921 middleware GET /admin/jsi18n/ - User: adminpred
+INFO 2025-11-29 19:18:28,923 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2025-11-29 19:18:31,092 middleware GET /admin/markets/resolution/ - User: adminpred
+INFO 2025-11-29 19:18:31,113 basehttp "GET /admin/markets/resolution/ HTTP/1.1" 200 19994
+INFO 2025-11-29 19:18:31,143 middleware GET /admin/jsi18n/ - User: adminpred
+INFO 2025-11-29 19:18:31,145 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2025-11-29 19:18:33,508 middleware GET /admin/positions/position/ - User: adminpred
+INFO 2025-11-29 19:18:33,533 basehttp "GET /admin/positions/position/ HTTP/1.1" 200 21340
+INFO 2025-11-29 19:18:33,571 middleware GET /admin/jsi18n/ - User: adminpred
+INFO 2025-11-29 19:18:33,573 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2025-11-29 19:18:36,242 middleware GET /admin/auth/group/ - User: adminpred
+INFO 2025-11-29 19:18:36,255 basehttp "GET /admin/auth/group/ HTTP/1.1" 200 15997
+INFO 2025-11-29 19:18:36,284 middleware GET /admin/jsi18n/ - User: adminpred
+INFO 2025-11-29 19:18:36,286 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2025-11-29 19:18:37,054 middleware GET /admin/disputes/dispute/ - User: adminpred
+INFO 2025-11-29 19:18:37,079 basehttp "GET /admin/disputes/dispute/ HTTP/1.1" 200 21044
+INFO 2025-11-29 19:18:37,110 middleware GET /admin/jsi18n/ - User: adminpred
+INFO 2025-11-29 19:18:37,112 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2025-11-29 19:18:43,125 middleware GET /admin/users/user/ - User: adminpred
+INFO 2025-11-29 19:18:43,156 basehttp "GET /admin/users/user/ HTTP/1.1" 200 50340
+INFO 2025-11-29 19:18:43,190 middleware GET /admin/jsi18n/ - User: adminpred
+INFO 2025-11-29 19:18:43,192 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2025-11-29 19:19:46,917 middleware GET /admin/markets/pricehistory/ - User: adminpred
+INFO 2025-11-29 19:19:46,940 basehttp "GET /admin/markets/pricehistory/ HTTP/1.1" 200 29376
+INFO 2025-11-29 19:19:46,977 middleware GET /admin/jsi18n/ - User: adminpred
+INFO 2025-11-29 19:19:46,980 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2025-11-29 19:31:32,346 autoreload Watching for file changes with StatReloader
+INFO 2025-11-29 19:40:29,800 middleware GET /favicon.ico - User: adminpred
+WARNING 2025-11-29 19:40:29,922 log Not Found: /favicon.ico
+WARNING 2025-11-29 19:40:29,957 basehttp "GET /favicon.ico HTTP/1.1" 404 5259
+INFO 2025-11-30 09:02:27,085 autoreload Watching for file changes with StatReloader
+INFO 2025-11-30 09:06:08,370 middleware GET / - User: adminpred
+INFO 2025-11-30 09:06:08,371 basehttp "GET / HTTP/1.1" 200 494
+INFO 2025-11-30 09:06:08,554 middleware GET /favicon.ico - User: adminpred
+WARNING 2025-11-30 09:06:08,563 log Not Found: /favicon.ico
+WARNING 2025-11-30 09:06:08,564 basehttp "GET /favicon.ico HTTP/1.1" 404 5259
+INFO 2025-11-30 09:06:12,518 middleware GET /admin/ - User: adminpred
+INFO 2025-11-30 09:06:12,577 basehttp "GET /admin/ HTTP/1.1" 200 16771
+INFO 2025-11-30 09:06:12,600 basehttp "GET /static/admin/css/base.css HTTP/1.1" 304 0
+INFO 2025-11-30 09:06:12,601 basehttp "GET /static/admin/css/dark_mode.css HTTP/1.1" 304 0
+INFO 2025-11-30 09:06:12,604 basehttp "GET /static/admin/css/nav_sidebar.css HTTP/1.1" 304 0
+INFO 2025-11-30 09:06:12,607 basehttp "GET /static/admin/js/theme.js HTTP/1.1" 304 0
+INFO 2025-11-30 09:06:12,611 basehttp "GET /static/admin/css/responsive.css HTTP/1.1" 304 0
+INFO 2025-11-30 09:06:12,637 basehttp "GET /static/admin/js/nav_sidebar.js HTTP/1.1" 304 0
+INFO 2025-11-30 09:06:14,726 middleware GET /admin/users/user/ - User: adminpred
+INFO 2025-11-30 09:06:14,803 basehttp "GET /admin/users/user/ HTTP/1.1" 200 75582
+INFO 2025-11-30 09:06:14,841 middleware GET /admin/jsi18n/ - User: adminpred
+INFO 2025-11-30 09:06:14,845 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2025-11-30 09:06:44,725 middleware GET /admin/liquidity/liquidityevent/ - User: adminpred
+INFO 2025-11-30 09:06:44,781 basehttp "GET /admin/liquidity/liquidityevent/ HTTP/1.1" 200 73749
+INFO 2025-11-30 09:06:44,817 middleware GET /admin/jsi18n/ - User: adminpred
+INFO 2025-11-30 09:06:44,819 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2025-11-30 09:06:53,459 middleware GET /admin/disputes/dispute/ - User: adminpred
+INFO 2025-11-30 09:06:53,530 basehttp "GET /admin/disputes/dispute/ HTTP/1.1" 200 78996
+INFO 2025-11-30 09:06:53,567 middleware GET /admin/jsi18n/ - User: adminpred
+INFO 2025-11-30 09:06:53,569 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2025-11-30 09:06:56,861 middleware GET /admin/markets/outcometoken/ - User: adminpred
+INFO 2025-11-30 09:06:56,894 basehttp "GET /admin/markets/outcometoken/ HTTP/1.1" 200 52531
+INFO 2025-11-30 09:06:56,926 middleware GET /admin/jsi18n/ - User: adminpred
+INFO 2025-11-30 09:06:56,928 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2025-11-30 09:06:59,415 middleware GET /admin/markets/pricehistory/ - User: adminpred
+INFO 2025-11-30 09:06:59,460 basehttp "GET /admin/markets/pricehistory/ HTTP/1.1" 200 68035
+INFO 2025-11-30 09:06:59,492 middleware GET /admin/jsi18n/ - User: adminpred
+INFO 2025-11-30 09:06:59,493 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2025-11-30 09:07:01,281 middleware GET /admin/markets/resolution/ - User: adminpred
+INFO 2025-11-30 09:07:01,317 basehttp "GET /admin/markets/resolution/ HTTP/1.1" 200 28037
+INFO 2025-11-30 09:07:01,397 middleware GET /admin/jsi18n/ - User: adminpred
+INFO 2025-11-30 09:07:01,400 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2025-11-30 09:07:03,182 middleware GET /admin/positions/position/ - User: adminpred
+INFO 2025-11-30 09:07:03,238 basehttp "GET /admin/positions/position/ HTTP/1.1" 200 75382
+INFO 2025-11-30 09:07:03,289 middleware GET /admin/jsi18n/ - User: adminpred
+INFO 2025-11-30 09:07:03,290 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2025-11-30 09:13:12,641 middleware GET / - User: 
+INFO 2025-11-30 09:13:12,643 basehttp "GET / HTTP/1.1" 200 494
+INFO 2025-11-30 09:13:14,153 middleware GET /favicon.ico - User: 
+WARNING 2025-11-30 09:13:14,158 log Not Found: /favicon.ico
+WARNING 2025-11-30 09:13:14,160 basehttp "GET /favicon.ico HTTP/1.1" 404 5259
+INFO 2025-11-30 09:13:19,142 middleware GET /admin - User: 
+INFO 2025-11-30 09:13:19,146 basehttp "GET /admin HTTP/1.1" 301 0
+INFO 2025-11-30 09:13:19,151 middleware GET /admin/ - User: 
+INFO 2025-11-30 09:13:19,152 basehttp "GET /admin/ HTTP/1.1" 302 0
+INFO 2025-11-30 09:13:19,154 middleware GET /admin/login/ - User: 
+INFO 2025-11-30 09:13:19,167 basehttp "GET /admin/login/?next=/admin/ HTTP/1.1" 200 4170
+INFO 2025-11-30 09:13:19,194 basehttp "GET /static/admin/css/dark_mode.css HTTP/1.1" 200 2808
+INFO 2025-11-30 09:13:19,200 basehttp "GET /static/admin/css/base.css HTTP/1.1" 200 22120
+INFO 2025-11-30 09:13:19,200 basehttp "GET /static/admin/js/theme.js HTTP/1.1" 200 1653
+INFO 2025-11-30 09:13:19,201 basehttp "GET /static/admin/css/nav_sidebar.css HTTP/1.1" 200 2810
+INFO 2025-11-30 09:13:19,202 basehttp "GET /static/admin/css/login.css HTTP/1.1" 200 951
+INFO 2025-11-30 09:13:19,203 basehttp "GET /static/admin/css/responsive.css HTTP/1.1" 200 16565
+INFO 2025-11-30 09:13:19,210 basehttp "GET /static/admin/js/nav_sidebar.js HTTP/1.1" 200 3063
+INFO 2025-11-30 09:13:28,668 middleware POST /admin/login/ - User: 
+INFO 2025-11-30 09:13:28,875 basehttp "POST /admin/login/?next=/admin/ HTTP/1.1" 302 0
+INFO 2025-11-30 09:13:28,888 middleware GET /admin/ - User: adminpred
+INFO 2025-11-30 09:13:28,896 basehttp "GET /admin/ HTTP/1.1" 200 16771
+INFO 2025-11-30 09:13:28,916 basehttp "GET /static/admin/css/dashboard.css HTTP/1.1" 200 441
+INFO 2025-11-30 09:13:28,925 basehttp "GET /static/admin/img/icon-addlink.svg HTTP/1.1" 200 331
+INFO 2025-11-30 09:13:28,926 basehttp "GET /static/admin/img/icon-changelink.svg HTTP/1.1" 200 380
+INFO 2025-11-30 09:14:06,075 middleware GET /admin/users/user/5/change/ - User: adminpred
+INFO 2025-11-30 09:14:06,127 basehttp "GET /admin/users/user/5/change/ HTTP/1.1" 200 36052
+INFO 2025-11-30 09:14:06,141 basehttp "GET /static/admin/css/forms.css HTTP/1.1" 200 8525
+INFO 2025-11-30 09:14:06,150 basehttp "GET /static/admin/js/calendar.js HTTP/1.1" 200 9141
+INFO 2025-11-30 09:14:06,152 basehttp "GET /static/admin/js/jquery.init.js HTTP/1.1" 200 347
+INFO 2025-11-30 09:14:06,152 basehttp "GET /static/admin/js/admin/DateTimeShortcuts.js HTTP/1.1" 200 19319
+INFO 2025-11-30 09:14:06,157 middleware GET /admin/jsi18n/ - User: adminpred
+INFO 2025-11-30 09:14:06,161 basehttp "GET /static/admin/js/core.js HTTP/1.1" 200 6208
+INFO 2025-11-30 09:14:06,163 basehttp "GET /static/admin/js/admin/RelatedObjectLookups.js HTTP/1.1" 200 9777
+INFO 2025-11-30 09:14:06,164 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2025-11-30 09:14:06,169 basehttp "GET /static/admin/js/SelectBox.js HTTP/1.1" 200 4530
+INFO 2025-11-30 09:14:06,170 basehttp "GET /static/admin/js/actions.js HTTP/1.1" 200 8076
+INFO 2025-11-30 09:14:06,171 basehttp "GET /static/admin/js/urlify.js HTTP/1.1" 200 7887
+INFO 2025-11-30 09:14:06,172 basehttp "GET /static/admin/js/SelectFilter2.js HTTP/1.1" 200 15845
+INFO 2025-11-30 09:14:06,176 basehttp "GET /static/admin/js/vendor/jquery/jquery.js HTTP/1.1" 200 285314
+INFO 2025-11-30 09:14:06,176 basehttp "GET /static/admin/js/prepopulate.js HTTP/1.1" 200 1531
+INFO 2025-11-30 09:14:06,181 basehttp "GET /static/admin/js/prepopulate_init.js HTTP/1.1" 200 586
+INFO 2025-11-30 09:14:06,184 basehttp "GET /static/admin/js/vendor/xregexp/xregexp.js HTTP/1.1" 200 325171
+INFO 2025-11-30 09:14:06,186 basehttp "GET /static/admin/css/widgets.css HTTP/1.1" 200 11973
+INFO 2025-11-30 09:14:06,214 basehttp "GET /static/admin/js/change_form.js HTTP/1.1" 200 606
+INFO 2025-11-30 09:14:06,275 basehttp "GET /static/admin/img/search.svg HTTP/1.1" 200 458
+INFO 2025-11-30 09:14:06,275 basehttp "GET /static/admin/img/icon-calendar.svg HTTP/1.1" 200 1086
+INFO 2025-11-30 09:14:06,276 basehttp "GET /static/admin/img/selector-icons.svg HTTP/1.1" 200 3291
+INFO 2025-11-30 09:14:06,276 basehttp "GET /static/admin/img/icon-clock.svg HTTP/1.1" 200 677
+INFO 2025-11-30 09:14:10,830 middleware GET /admin/users/user/5/history/ - User: adminpred
+INFO 2025-11-30 09:14:10,843 basehttp "GET /admin/users/user/5/history/ HTTP/1.1" 200 14939
+INFO 2025-11-30 09:14:18,161 middleware GET /admin/trades/trade/ - User: adminpred
+INFO 2025-11-30 09:14:18,224 basehttp "GET /admin/trades/trade/ HTTP/1.1" 200 82080
+INFO 2025-11-30 09:14:18,240 basehttp "GET /static/admin/css/changelists.css HTTP/1.1" 200 6878
+INFO 2025-11-30 09:14:18,248 basehttp "GET /static/admin/js/filters.js HTTP/1.1" 200 978
+INFO 2025-11-30 09:14:18,255 middleware GET /admin/jsi18n/ - User: adminpred
+INFO 2025-11-30 09:14:18,257 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2025-11-30 09:14:18,274 basehttp "GET /static/admin/img/tooltag-add.svg HTTP/1.1" 200 331
+INFO 2025-11-30 09:14:18,276 basehttp "GET /static/admin/img/sorting-icons.svg HTTP/1.1" 200 1097
+INFO 2025-11-30 09:14:18,297 basehttp "GET /static/admin/img/icon-viewlink.svg HTTP/1.1" 200 581
+INFO 2025-11-30 09:14:25,944 middleware GET /admin/trades/trade/ - User: adminpred
+INFO 2025-11-30 09:14:26,017 basehttp "GET /admin/trades/trade/?_facets=True HTTP/1.1" 200 86194
+INFO 2025-11-30 09:14:26,041 middleware GET /admin/jsi18n/ - User: adminpred
+INFO 2025-11-30 09:14:26,042 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2025-11-30 09:14:26,058 basehttp "GET /static/admin/img/icon-hidelink.svg HTTP/1.1" 200 784
+INFO 2025-11-30 09:14:27,431 middleware GET /admin/trades/trade/ - User: adminpred
+INFO 2025-11-30 09:14:27,492 basehttp "GET /admin/trades/trade/? HTTP/1.1" 200 82080
+INFO 2025-11-30 09:14:27,515 middleware GET /admin/jsi18n/ - User: adminpred
+INFO 2025-11-30 09:14:27,518 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2025-11-30 09:17:31,672 autoreload Watching for file changes with StatReloader

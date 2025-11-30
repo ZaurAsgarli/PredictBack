@@ -12,6 +12,9 @@ class PositionViewSet(viewsets.ReadOnlyModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
     
     def get_queryset(self):
+        # Handle Swagger schema generation (when user is anonymous)
+        if getattr(self, 'swagger_fake_view', False) or not self.request.user.is_authenticated:
+            return Position.objects.none()
         return super().get_queryset().filter(user=self.request.user)
 
 
