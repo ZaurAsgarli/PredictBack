@@ -1,0 +1,75 @@
+# Dependencies
+node_modules/
+package-lock.json
+
+# Hardhat files
+cache/
+artifacts/
+typechain-types/
+typechain/
+.openzeppelin/
+
+# Environment variables
+.env
+.env.example
+.env.local
+.env.*.local
+.env.production
+.env.development
+.env.test
+
+# Coverage
+coverage/
+coverage.json
+coverage.lcov
+.nyc_output/
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.project
+.pydevproject
+.settings/
+*.sublime-project
+*.sublime-workspace
+
+# OS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+Desktop.ini
+
+# Build outputs
+dist/
+build/
+out/
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
+.cache/
+
+# Deployment artifacts
+deployed/
+deployments/
+*.deployed
+
+# Test files (optional - uncomment if you want to ignore test outputs)
+# test-results/
+# .test/
