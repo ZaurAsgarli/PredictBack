@@ -2895,3 +2895,233 @@ INFO 2025-11-30 09:14:27,492 basehttp "GET /admin/trades/trade/? HTTP/1.1" 200 8
 INFO 2025-11-30 09:14:27,515 middleware GET /admin/jsi18n/ - User: adminpred
 INFO 2025-11-30 09:14:27,518 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
 INFO 2025-11-30 09:17:31,672 autoreload Watching for file changes with StatReloader
+ERROR 2025-11-30 20:14:36,115 signal Signal handler <bound method DjangoFixup.on_import_modules of <celery.fixups.django.DjangoFixup object at 0x7b4391038090>> raised: ModuleNotFoundError("No module named 'pandas'")
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.11/site-packages/celery/utils/dispatch/signal.py", line 276, in send
+    response = receiver(signal=self, sender=sender, **named)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/celery/fixups/django.py", line 100, in on_import_modules
+    self.worker_fixup.validate_models()
+  File "/usr/local/lib/python3.11/site-packages/celery/fixups/django.py", line 140, in validate_models
+    run_checks()
+  File "/usr/local/lib/python3.11/site-packages/django/core/checks/registry.py", line 89, in run_checks
+    new_errors = check(app_configs=app_configs, databases=databases)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/core/checks/urls.py", line 16, in check_url_config
+    return check_resolver(resolver)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/core/checks/urls.py", line 26, in check_resolver
+    return check_method()
+           ^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/urls/resolvers.py", line 531, in check
+    for pattern in self.url_patterns:
+                   ^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/utils/functional.py", line 47, in __get__
+    res = instance.__dict__[self.name] = self.func(instance)
+                                         ^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/urls/resolvers.py", line 718, in url_patterns
+    patterns = getattr(self.urlconf_module, "urlpatterns", self.urlconf_module)
+                       ^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/utils/functional.py", line 47, in __get__
+    res = instance.__dict__[self.name] = self.func(instance)
+                                         ^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/urls/resolvers.py", line 711, in urlconf_module
+    return import_module(self.urlconf_name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/importlib/__init__.py", line 126, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen importlib._bootstrap>", line 1204, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1176, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1147, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 690, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 940, in exec_module
+  File "<frozen importlib._bootstrap>", line 241, in _call_with_frames_removed
+  File "/app/config/urls.py", line 83, in <module>
+    path('api/ml/', include('ml_api.urls'), name='ml_api'),
+                    ^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/urls/conf.py", line 39, in include
+    urlconf_module = import_module(urlconf_module)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/importlib/__init__.py", line 126, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen importlib._bootstrap>", line 1204, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1176, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1147, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 690, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 940, in exec_module
+  File "<frozen importlib._bootstrap>", line 241, in _call_with_frames_removed
+  File "/app/ml_api/urls.py", line 3, in <module>
+    from .views import (
+  File "/app/ml_api/views.py", line 5, in <module>
+    import pandas as pd
+ModuleNotFoundError: No module named 'pandas'
+ERROR 2025-11-30 20:14:36,146 signal Signal handler <bound method DjangoFixup.on_import_modules of <celery.fixups.django.DjangoFixup object at 0x7df24a56d450>> raised: ModuleNotFoundError("No module named 'pandas'")
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.11/site-packages/django/core/checks/urls.py", line 136, in check_custom_error_handlers
+    handler = resolver.resolve_error_handler(status_code)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/urls/resolvers.py", line 732, in resolve_error_handler
+    callback = getattr(self.urlconf_module, "handler%s" % view_type, None)
+                       ^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/utils/functional.py", line 47, in __get__
+    res = instance.__dict__[self.name] = self.func(instance)
+                                         ^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/urls/resolvers.py", line 711, in urlconf_module
+    return import_module(self.urlconf_name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/importlib/__init__.py", line 126, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen importlib._bootstrap>", line 1204, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1176, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1147, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 690, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 940, in exec_module
+  File "<frozen importlib._bootstrap>", line 241, in _call_with_frames_removed
+  File "/app/config/urls.py", line 83, in <module>
+    path('api/ml/', include('ml_api.urls'), name='ml_api'),
+                    ^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/urls/conf.py", line 39, in include
+    urlconf_module = import_module(urlconf_module)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/importlib/__init__.py", line 126, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen importlib._bootstrap>", line 1204, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1176, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1147, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 690, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 940, in exec_module
+  File "<frozen importlib._bootstrap>", line 241, in _call_with_frames_removed
+  File "/app/ml_api/urls.py", line 3, in <module>
+    from .views import (
+  File "/app/ml_api/views.py", line 5, in <module>
+    import pandas as pd
+ModuleNotFoundError: No module named 'pandas'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.11/site-packages/celery/utils/dispatch/signal.py", line 276, in send
+    response = receiver(signal=self, sender=sender, **named)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/celery/fixups/django.py", line 100, in on_import_modules
+    self.worker_fixup.validate_models()
+  File "/usr/local/lib/python3.11/site-packages/celery/fixups/django.py", line 140, in validate_models
+    run_checks()
+  File "/usr/local/lib/python3.11/site-packages/django/core/checks/registry.py", line 89, in run_checks
+    new_errors = check(app_configs=app_configs, databases=databases)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/core/checks/urls.py", line 138, in check_custom_error_handlers
+    path = getattr(resolver.urlconf_module, "handler%s" % status_code)
+                   ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/utils/functional.py", line 47, in __get__
+    res = instance.__dict__[self.name] = self.func(instance)
+                                         ^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/urls/resolvers.py", line 711, in urlconf_module
+    return import_module(self.urlconf_name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/importlib/__init__.py", line 126, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen importlib._bootstrap>", line 1204, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1176, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1147, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 690, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 940, in exec_module
+  File "<frozen importlib._bootstrap>", line 241, in _call_with_frames_removed
+  File "/app/config/urls.py", line 83, in <module>
+    path('api/ml/', include('ml_api.urls'), name='ml_api'),
+                    ^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/urls/conf.py", line 39, in include
+    urlconf_module = import_module(urlconf_module)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/importlib/__init__.py", line 126, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen importlib._bootstrap>", line 1204, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1176, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1147, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 690, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 940, in exec_module
+  File "<frozen importlib._bootstrap>", line 241, in _call_with_frames_removed
+  File "/app/ml_api/urls.py", line 3, in <module>
+    from .views import (
+  File "/app/ml_api/views.py", line 5, in <module>
+    import pandas as pd
+ModuleNotFoundError: No module named 'pandas'
+INFO 2025-11-30 20:14:37,265 autoreload Watching for file changes with StatReloader
+INFO 2025-11-30 20:19:19,595 autoreload Watching for file changes with StatReloader
+INFO 2025-11-30 20:25:58,641 middleware GET / - User: adminpred
+INFO 2025-11-30 20:25:58,644 basehttp "GET / HTTP/1.1" 200 494
+INFO 2025-11-30 20:25:59,850 middleware GET /favicon.ico - User: adminpred
+WARNING 2025-11-30 20:25:59,862 log Not Found: /favicon.ico
+WARNING 2025-11-30 20:25:59,864 basehttp "GET /favicon.ico HTTP/1.1" 404 5409
+INFO 2025-11-30 20:26:06,642 middleware GET /admin - User: adminpred
+INFO 2025-11-30 20:26:06,645 basehttp "GET /admin HTTP/1.1" 301 0
+INFO 2025-11-30 20:26:06,656 middleware GET /admin/ - User: adminpred
+INFO 2025-11-30 20:26:06,701 basehttp "GET /admin/ HTTP/1.1" 200 16771
+INFO 2025-11-30 20:26:11,236 middleware GET /admin/users/user/ - User: adminpred
+INFO 2025-11-30 20:26:11,312 basehttp "GET /admin/users/user/ HTTP/1.1" 200 75582
+INFO 2025-11-30 20:26:11,343 middleware GET /admin/jsi18n/ - User: adminpred
+INFO 2025-11-30 20:26:11,346 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2025-11-30 20:26:13,806 middleware GET /admin/positions/position/ - User: adminpred
+INFO 2025-11-30 20:26:13,864 basehttp "GET /admin/positions/position/ HTTP/1.1" 200 75382
+INFO 2025-11-30 20:26:13,885 middleware GET /admin/jsi18n/ - User: adminpred
+INFO 2025-11-30 20:26:13,888 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2025-11-30 20:26:22,775 middleware GET /graphql - User: adminpred
+INFO 2025-11-30 20:26:22,780 basehttp "GET /graphql HTTP/1.1" 301 0
+INFO 2025-11-30 20:26:22,791 middleware GET /graphql/ - User: adminpred
+INFO 2025-11-30 20:26:22,792 basehttp "GET /graphql/ HTTP/1.1" 200 4257
+INFO 2025-11-30 20:26:24,808 middleware POST /graphql/ - User: adminpred
+INFO 2025-11-30 20:26:24,853 basehttp "POST /graphql/ HTTP/1.1" 200 23061
+INFO 2025-11-30 20:26:31,294 middleware GET /swagger - User: adminpred
+INFO 2025-11-30 20:26:31,298 basehttp "GET /swagger HTTP/1.1" 301 0
+INFO 2025-11-30 20:26:31,311 middleware GET /swagger/ - User: adminpred
+INFO 2025-11-30 20:26:31,314 basehttp "GET /swagger/ HTTP/1.1" 200 2161
+INFO 2025-11-30 20:26:31,351 basehttp "GET /static/drf-yasg/style.css HTTP/1.1" 200 1047
+INFO 2025-11-30 20:26:31,355 basehttp "GET /static/drf-yasg/insQ.min.js HTTP/1.1" 200 2093
+INFO 2025-11-30 20:26:31,366 basehttp "GET /static/drf-yasg/swagger-ui-init.js HTTP/1.1" 200 14964
+INFO 2025-11-30 20:26:31,368 basehttp "GET /static/drf-yasg/immutable.min.js HTTP/1.1" 200 56904
+INFO 2025-11-30 20:26:31,371 basehttp "GET /static/drf-yasg/swagger-ui-dist/swagger-ui.css HTTP/1.1" 200 145206
+INFO 2025-11-30 20:26:31,376 basehttp "GET /static/drf-yasg/swagger-ui-dist/swagger-ui-standalone-preset.js HTTP/1.1" 200 322863
+INFO 2025-11-30 20:26:31,382 basehttp "GET /static/drf-yasg/swagger-ui-dist/swagger-ui-bundle.js HTTP/1.1" 200 1046583
+INFO 2025-11-30 20:26:31,501 middleware GET /swagger/ - User: adminpred
+INFO 2025-11-30 20:26:31,539 basehttp "GET /static/drf-yasg/swagger-ui-dist/favicon-32x32.png HTTP/1.1" 200 628
+INFO 2025-11-30 20:26:31,540 basehttp "GET /swagger/?format=openapi HTTP/1.1" 200 28129
+INFO 2025-11-30 20:26:41,353 middleware GET /api/analytics - User: adminpred
+WARNING 2025-11-30 20:26:41,357 log Not Found: /api/analytics
+WARNING 2025-11-30 20:26:41,358 basehttp "GET /api/analytics HTTP/1.1" 404 5415
+INFO 2025-11-30 20:26:48,808 middleware GET /api/nalytics - User: adminpred
+WARNING 2025-11-30 20:26:48,813 log Not Found: /api/nalytics
+WARNING 2025-11-30 20:26:48,813 basehttp "GET /api/nalytics HTTP/1.1" 404 5412
+INFO 2025-11-30 20:27:08,486 middleware GET /swagger/ - User: adminpred
+INFO 2025-11-30 20:27:08,489 basehttp "GET /swagger/ HTTP/1.1" 200 2161
+INFO 2025-11-30 20:27:08,569 middleware GET /swagger/ - User: adminpred
+INFO 2025-11-30 20:27:08,597 basehttp "GET /swagger/?format=openapi HTTP/1.1" 200 28129
+INFO 2025-11-30 20:27:20,732 middleware GET /api/analytics/global/ - User: adminpred
+INFO 2025-11-30 20:27:21,261 basehttp "GET /api/analytics/global/ HTTP/1.1" 200 9776
+INFO 2025-11-30 20:27:42,855 middleware GET / - User: adminpred
+INFO 2025-11-30 20:27:42,859 basehttp "GET / HTTP/1.1" 200 494
+INFO 2025-11-30 20:27:49,712 middleware GET /api/analytics/monthly - User: adminpred
+INFO 2025-11-30 20:27:49,715 basehttp "GET /api/analytics/monthly HTTP/1.1" 301 0
+INFO 2025-11-30 20:27:49,728 middleware GET /api/analytics/monthly/ - User: adminpred
+INFO 2025-11-30 20:27:51,655 basehttp "GET /api/analytics/monthly/ HTTP/1.1" 200 27635
+INFO 2025-11-30 20:27:51,735 basehttp "GET /static/rest_framework/css/prettify.css HTTP/1.1" 200 817
+INFO 2025-11-30 20:27:51,736 basehttp "GET /static/rest_framework/css/default.css HTTP/1.1" 200 1152
+INFO 2025-11-30 20:27:51,740 basehttp "GET /static/rest_framework/js/ajax-form.js HTTP/1.1" 200 3796
+INFO 2025-11-30 20:27:51,745 basehttp "GET /static/rest_framework/css/bootstrap-tweaks.css HTTP/1.1" 200 3426
+INFO 2025-11-30 20:27:51,749 basehttp "GET /static/rest_framework/js/csrf.js HTTP/1.1" 200 1793
+INFO 2025-11-30 20:27:51,754 basehttp "GET /static/rest_framework/js/prettify-min.js HTTP/1.1" 200 13632
+INFO 2025-11-30 20:27:51,757 basehttp "GET /static/rest_framework/js/default.js HTTP/1.1" 200 1268
+INFO 2025-11-30 20:27:51,758 basehttp "GET /static/rest_framework/js/bootstrap.min.js HTTP/1.1" 200 39680
+INFO 2025-11-30 20:27:51,760 basehttp "GET /static/rest_framework/js/load-ajax-form.js HTTP/1.1" 200 59
+INFO 2025-11-30 20:27:51,763 basehttp "GET /static/rest_framework/js/jquery-3.7.1.min.js HTTP/1.1" 200 87533
+INFO 2025-11-30 20:27:51,764 basehttp "GET /static/rest_framework/css/bootstrap.min.css HTTP/1.1" 200 121457
+INFO 2025-11-30 20:27:51,779 basehttp "GET /static/rest_framework/img/grid.png HTTP/1.1" 200 1458
+INFO 2025-11-30 20:28:15,194 middleware GET /admin/ - User: adminpred
+INFO 2025-11-30 20:28:15,205 basehttp "GET /admin/ HTTP/1.1" 200 16771
+INFO 2025-11-30 20:28:19,062 middleware GET / - User: adminpred
+INFO 2025-11-30 20:28:19,063 basehttp "GET / HTTP/1.1" 200 494

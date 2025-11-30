@@ -1,508 +1,422 @@
-# PredictHub Backend
+# PredictHub - Decentralized Prediction Market Platform
 
-Production-ready Django backend for a Community Prediction Market.
+**SDF2 Build - Production Ready**
+
+A full-stack decentralized prediction market platform integrating Blockchain, Backend, Database, and Data Science components.
 
 [![Django](https://img.shields.io/badge/Django-5.2.8-green.svg)](https://www.djangoproject.com/)
-[![DRF](https://img.shields.io/badge/DRF-3.15.2-red.svg)](https://www.django-rest-framework.org/)
+[![Solidity](https://img.shields.io/badge/Solidity-0.8.20-blue.svg)](https://soliditylang.org/)
 [![PostgreSQL](https://img.shields.io/badge/PostgreSQL-15-blue.svg)](https://www.postgresql.org/)
-[![Docker](https://img.shields.io/badge/Docker-Ready-blue.svg)](https://www.docker.com/)
+[![Brownie](https://img.shields.io/badge/Brownie-1.21.0-orange.svg)](https://eth-brownie.readthedocs.io/)
 
-## 🚀 Features
+---
 
-- **User Authentication**: JWT-based authentication with refresh tokens
-- **Prediction Markets**: Create and manage prediction markets with YES/NO outcomes
-- **AMM Pricing**: Automated Market Maker for dynamic price discovery
-- **Trading System**: Buy/sell outcome tokens with real-time price updates
-- **Position Tracking**: Track user holdings across all markets
-- **Dispute Resolution**: Bond-based dispute system for market resolutions
-- **Leaderboards**: Global, weekly, and monthly leaderboards
-- **API Documentation**: Swagger/OpenAPI and GraphQL endpoints
-- **Async Tasks**: Celery integration for background jobs
-- **Webhook Support**: Ready for on-chain indexer integration
+## 🏗️ Architecture Overview
 
-## 📦 Tech Stack
-
-- **Django 5.2.8** - Web framework
-- **Django REST Framework** - REST API framework
-- **Django CORS Headers** - Cross-origin resource sharing
-- **Django Environ** - Environment variable management
-- **Django REST Framework SimpleJWT** - JWT authentication
-- **PostgreSQL** - Database
-- **Docker + Docker Compose** - Containerization
-- **Celery + Redis** - Asynchronous task queue
-- **Swagger/OpenAPI (drf-yasg)** - API documentation
-- **GraphQL (Strawberry)** - GraphQL API
-
-## Project Structure
-
-```
-predicthub_backend/
-├── manage.py
-├── Dockerfile
-├── docker-compose.yml
-├── requirements.txt
-├── .env.example
-├── seed.py
-├── config/
-│   ├── settings.py
-│   ├── urls.py
-│   ├── asgi.py
-│   ├── wsgi.py
-│   ├── celery.py
-│   └── graphql_schema.py
-├── users/
-├── markets/
-├── trades/
-├── positions/
-├── disputes/
-├── liquidity/
-├── analytics/
-├── indexer/
-└── utils/
+```mermaid
+graph TB
+    subgraph "Blockchain Layer"
+        SC[Smart Contract<br/>PredictionMarket.sol]
+        EVT[Events:<br/>UserCreated, MarketCreated,<br/>TradeExecuted, LiquidityAdded]
+    end
+    
+    subgraph "Indexer Layer"
+        LST[Event Listener<br/>WebSocket/Polling]
+        PRC[Event Processor<br/>Web3.py]
+        RPC[JSON-RPC Server<br/>Admin API]
+    end
+    
+    subgraph "Backend Layer"
+        API[Django REST API<br/>FastAPI-style endpoints]
+        CEL[Celery Workers<br/>Async tasks]
+        AUTH[JWT Authentication]
+    end
+    
+    subgraph "Database Layer"
+        PG[(PostgreSQL<br/>4NF Normalized)]
+        MV[Materialized Views<br/>Dashboard Aggregates]
+    end
+    
+    subgraph "Data Science Layer"
+        M1[Model 1: Trade Risk<br/>Isolation Forest]
+        M4[Model 4: Manipulation<br/>Graph Analytics]
+        M5[Model 5: Health<br/>MHEWS]
+        DB_STORE[(Prediction Storage<br/>ml_traderiskprediction)]
+    end
+    
+    SC -->|Emits| EVT
+    EVT -->|Listens| LST
+    LST -->|Decodes| PRC
+    PRC -->|Saves| PG
+    PRC -->|Triggers| M1
+    API -->|Queries| PG
+    API -->|Calls| M1
+    M1 -->|Saves| DB_STORE
+    M4 -->|Saves| DB_STORE
+    M5 -->|Saves| DB_STORE
+    PG -->|Aggregates| MV
+    API -->|Exposes| RPC
 ```
 
-## 🛠️ Setup
+---
+
+## 📁 Project Structure
+
+```
+PredictBack/
+├── contracts/                # Solidity contracts & Brownie tests
+│   ├── contracts/            # Solidity source files
+│   ├── tests/               # Brownie test suite (39 tests)
+│   ├── scripts/             # Deployment scripts
+│   └── README.md            # Contract documentation
+│
+├── backend/                 # Django backend
+│   ├── indexer/             # Blockchain event indexer
+│   ├── markets/             # Market management
+│   ├── trades/              # Trading system
+│   ├── ml_api/              # ML API endpoints
+│   ├── users/               # User management
+│   ├── db_docs/             # Database documentation
+│   └── README.md            # Backend documentation
+│
+├── ml/                      # ML models & services (root level)
+│   ├── data/                # CSV/synthetic data
+│   ├── models/              # Saved .pkl files
+│   ├── notebooks/           # Jupyter notebooks
+│   └── README.md            # ML documentation
+│
+├── database/                # Database scripts & SQL
+│   ├── sql/                 # SQL scripts
+│   └── seeds/               # Seed scripts
+│
+├── scripts/                 # Utility scripts
+├── tests/                   # Consolidated tests
+├── docker-compose.yml       # Docker orchestration
+├── Dockerfile               # Docker image definition
+└── TESTING_GUIDE.md         # Master testing guide
+```
+
+---
+
+## 🚀 Quick Start
 
 ### Prerequisites
 
-- Python 3.11+
-- PostgreSQL 15+
-- Redis 7+
-- Docker & Docker Compose (optional, for containerized setup)
+- **Python 3.11+**
+- **Node.js 18+** (for Hardhat)
+- **PostgreSQL 15+**
+- **Redis 7+**
+- **Docker & Docker Compose** (optional)
+- **Ganache** (for local blockchain testing)
 
-### Using Docker (Recommended)
+### 1. Clone & Setup
 
-1. **Clone the repository** (if not already done)
-
-2. **Copy environment file**:
 ```bash
-cd predicthub_backend
-cp .env.example .env
+git clone <repository-url>
+cd PredictBack
 ```
 
-3. **Build and run with Docker Compose**:
+### 2. Start Database (Docker)
+
 ```bash
-docker-compose up --build
+docker-compose up -d db redis
 ```
 
-This will start:
-- PostgreSQL database on port 5432
-- Redis on port 6379
-- Django web server on port 8000
-- Celery worker for async tasks
-- Celery beat for scheduled tasks
+### 3. Deploy Smart Contract
 
-4. **Run migrations** (in a new terminal or exec into container):
 ```bash
-docker-compose exec web python manage.py migrate
+cd contracts
+npm install
+npx hardhat run scripts/deploy_and_export.js --network localhost
 ```
 
-5. **Create superuser**:
+### 4. Start Backend & Indexer
+
 ```bash
-docker-compose exec web python manage.py createsuperuser
-```
-
-6. **Seed sample data**:
-```bash
-docker-compose exec web python manage_seed.py
-```
-
-### Local Development
-
-1. **Create virtual environment**:
-```bash
-python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
-```
-
-2. **Install dependencies**:
-```bash
-pip install -r requirements.txt
-```
-
-3. **Set up PostgreSQL database**:
-```bash
-# Create database
-createdb predicthub_db
-
-# Or using psql:
-psql -U postgres
-CREATE DATABASE predicthub_db;
-```
-
-4. **Set up environment variables**:
-```bash
-cp .env.example .env
-# Edit .env with your database and Redis settings
-```
-
-5. **Run migrations**:
-```bash
+cd backend
 python manage.py migrate
-```
-
-6. **Create superuser**:
-```bash
-python manage.py createsuperuser
-```
-
-7. **Seed sample data**:
-```bash
-python manage_seed.py
-```
-
-8. **Run development server**:
-```bash
+python manage.py seed_knowledge_tags
 python manage.py runserver
 ```
 
-9. **Run Celery worker** (in separate terminal):
+In another terminal:
 ```bash
-celery -A config worker -l info
+cd backend
+python manage.py listen_events --poll-interval 12
 ```
 
-10. **Run Celery beat** (in another terminal, for scheduled tasks):
+### 5. Verify System
+
 ```bash
-celery -A config beat -l info
+# Run tests
+cd contracts
+brownie test
+
+cd ../backend
+pytest
+
+# Verify ML integration
+python manage.py verify_ml_db_integration --test-all
 ```
 
-## 📡 API Endpoints
+---
 
-### Authentication
+## 🔗 System Components
 
-| Method | Endpoint | Description | Auth Required |
-|--------|----------|-------------|---------------|
-| POST | `/auth/signup/` | User registration | No |
-| POST | `/auth/login/` | User login | No |
-| GET | `/auth/me/` | Get current user profile | Yes |
-| POST | `/auth/token/refresh/` | Refresh JWT token | No |
+### 1. Smart Contracts (`contracts/`)
 
-**Example Signup Request**:
-```json
-POST /auth/signup/
-{
-  "username": "johndoe",
-  "email": "john@example.com",
-  "password": "securepassword123",
-  "password_confirm": "securepassword123"
-}
-```
+- **Contract**: `PredictionMarket.sol`
+- **Events**: `UserCreated`, `MarketCreated`, `TradeExecuted`, `LiquidityAdded`, `MarketResolved`
+- **Testing**: 39 Brownie tests (21 success + 18 error paths)
+- **Deployment**: Hardhat script exports ABI to backend
 
-**Example Login Request**:
-```json
-POST /auth/login/
-{
-  "email": "john@example.com",
-  "password": "securepassword123"
-}
-```
+See [`contracts/README.md`](contracts/README.md) for details.
 
-### Markets
+### 2. Backend & Indexer (`backend/`)
 
-| Method | Endpoint | Description | Auth Required |
-|--------|----------|-------------|---------------|
-| GET | `/markets/` | List all markets (paginated) | No |
-| GET | `/markets/featured/` | Get featured markets | No |
-| GET | `/markets/{id}/` | Get market details | No |
-| GET | `/markets/categories/` | Get all categories | No |
-| POST | `/markets/create/` | Create market | Admin |
-| POST | `/markets/{id}/resolve/` | Resolve market | Admin |
-| GET | `/markets/{id}/trades/` | Get market trades | No |
-| GET | `/markets/{id}/position/` | Get user position | Yes |
+- **Framework**: Django 5.2.8 + DRF
+- **Indexer**: WebSocket/Polling listener for blockchain events
+- **API**: REST endpoints for markets, trades, positions
+- **RPC**: JSON-RPC 2.0 server for admin integration
 
-**Example Create Market** (Admin only):
-```json
-POST /markets/create/
-{
-  "title": "Will Bitcoin reach $100k by 2025?",
-  "description": "Prediction on Bitcoin price",
-  "category": 1,
-  "ends_at": "2025-12-31T23:59:59Z"
-}
-```
+See [`backend/README.md`](backend/README.md) for details.
 
-### Trades
+### 3. Database (`database/` & `backend/db_docs/`)
 
-| Method | Endpoint | Description | Auth Required |
-|--------|----------|-------------|---------------|
-| POST | `/markets/{id}/trade/` | Create a trade (buy/sell) | Yes |
-| GET | `/trades/` | List all trades | Yes |
-| GET | `/users/me/trades/` | Get user's trades | Yes |
+- **Schema**: 4NF normalized PostgreSQL
+- **Tables**: Users, Markets, Trades, Liquidity, KnowledgeTags
+- **Views**: Materialized view for dashboard (`market_volume_by_tag`)
+- **Migrations**: Django migrations with seed scripts
+- **SQL Scripts**: Located in `database/sql/`
 
-**Example Trade Request**:
-```json
-POST /markets/1/trade/
-{
-  "outcome_type": "YES",
-  "trade_type": "buy",
-  "amount_staked": 100.00
-}
-```
+See [`backend/db_docs/README.md`](backend/db_docs/README.md) for details.
 
-### Positions
+### 4. Data Science (`ml/`)
 
-| Method | Endpoint | Description | Auth Required |
-|--------|----------|-------------|---------------|
-| GET | `/users/me/positions/` | Get user's positions | Yes |
-| GET | `/markets/{id}/position/` | Get position for specific market | Yes |
+- **Model 1**: Trade Risk Detection (Isolation Forest)
+- **Model 4**: Market Manipulation (Graph Analytics)
+- **Model 5**: Platform Health (MHEWS)
+- **Storage**: Predictions saved to `ml_*` tables
+- **Data**: Synthetic data in `ml/data/`
+- **Notebooks**: Jupyter notebooks in `ml/notebooks/`
 
-### Leaderboard
+See [`ml/README.md`](ml/README.md) for details.
 
-| Method | Endpoint | Description | Auth Required |
-|--------|----------|-------------|---------------|
-| GET | `/leaderboard/global/` | Global leaderboard | No |
-| GET | `/leaderboard/weekly/` | Weekly leaderboard | No |
-| GET | `/leaderboard/monthly/` | Monthly leaderboard | No |
-| GET | `/leaderboard/user/{id}/` | User leaderboard position | No |
+---
 
-### Webhook
+## 🔄 Data Flow
 
-| Method | Endpoint | Description | Auth Required |
-|--------|----------|-------------|---------------|
-| POST | `/webhook/` | Webhook endpoint for on-chain indexer | No |
-| GET | `/webhook/rpc/` | RPC endpoint for AMM feeds | No |
+### Golden Flow: User Creates Market → Adds Liquidity → Trade Executed
 
-## 📚 API Documentation
+1. **On-Chain**: User calls `createMarket()` → `MarketCreated` event emitted
+2. **Indexer**: Listener catches event → Decodes → Processes
+3. **Database**: `EventProcessor` saves to `markets_market` table
+4. **API**: `/api/markets/` returns new market
+5. **ML**: Trade risk model analyzes → Saves to `ml_traderiskprediction`
 
-Once the server is running, access the interactive API documentation:
-
-- **Swagger UI**: http://localhost:8000/swagger/
-- **ReDoc**: http://localhost:8000/redoc/
-- **GraphQL Playground**: http://localhost:8000/graphql/
-- **Admin Panel**: http://localhost:8000/admin/
-
-### Using the API
-
-All authenticated endpoints require a JWT token in the Authorization header:
-```
-Authorization: Bearer <access_token>
-```
-
-Example with cURL:
-```bash
-curl -H "Authorization: Bearer YOUR_TOKEN" http://localhost:8000/auth/me/
-```
-
-## 🗄️ Database Models
-
-### User
-Custom user model extending Django's AbstractUser with prediction market specific fields:
-- `total_points`: Accumulated points from winning predictions
-- `win_rate`: Percentage of correct predictions
-- `streak`: Current winning streak
-
-### Market
-Represents a prediction event:
-- `title`, `description`: Market details
-- `category`: Market category (Sports, Politics, etc.)
-- `status`: `active`, `closed`, or `resolved`
-- `resolution_outcome`: Final outcome (`YES` or `NO`)
-- `liquidity_pool`: Total liquidity in the market
-- `fee_percentage`: Trading fee (default 2%)
-- `ends_at`: Market end date/time
-
-### OutcomeToken
-Each market has 2 outcome tokens (YES/NO):
-- `outcome_type`: `YES` or `NO`
-- `price`: Current price (0.0 to 1.0)
-- `supply`: Total supply of tokens
-
-### Trade
-Buy/sell transactions:
-- `outcome_type`: `YES` or `NO`
-- `trade_type`: `buy` or `sell`
-- `amount_staked`: Amount staked in the trade
-- `tokens_amount`: Tokens received/paid
-- `price_at_execution`: Price when trade was executed
-
-### Position
-Tracks user's accumulated holdings per market:
-- `yes_tokens`: Number of YES tokens held
-- `no_tokens`: Number of NO tokens held
-- `total_staked`: Total amount staked
-
-### Resolution
-Market resolution details:
-- `resolved_outcome`: Final outcome
-- `resolver`: Admin who resolved the market
-- `dispute_window`: Time window for disputes
-- `bond_amount`: Required bond for disputes
-
-### Dispute
-User disputes against resolutions:
-- `status`: `pending`, `accepted`, or `rejected`
-- `bond_amount`: Bond paid for dispute
-- `reason`: Dispute reason
-
-### LiquidityEvent
-Tracks AMM liquidity changes:
-- `event_type`: `add` or `remove`
-- `amount`: Liquidity amount
-
-### PriceHistory
-Historical price data for charts:
-- `yes_price`, `no_price`: Price snapshot
-- `timestamp`: When price was recorded
-
-## 💹 AMM Pricing Logic
-
-The Automated Market Maker (AMM) calculates prices dynamically based on liquidity:
+### Event Processing Flow
 
 ```
-price_yes = liquidity_yes / (liquidity_yes + liquidity_no)
-price_no = liquidity_no / (liquidity_yes + liquidity_no)
+Blockchain Event → Listener → Decoder → Processor → Database
+                                      ↓
+                                 ML Models
+                                      ↓
+                              Prediction Storage
 ```
 
-**How it works**:
-- When someone buys YES tokens, YES liquidity increases → YES price goes up
-- When someone sells YES tokens, YES liquidity decreases → YES price goes down
-- Prices always sum to 1.0 (100%)
-- Prices update in real-time with each trade
+---
 
-**Example**:
-- Initial: YES = 500, NO = 500 → Prices: YES = 0.5, NO = 0.5
-- After buying 100 YES: YES = 600, NO = 500 → Prices: YES = 0.545, NO = 0.455
+## 📊 Key Features
+
+- ✅ **Smart Contract Events**: All key actions emit events
+- ✅ **Event Indexing**: Automatic sync from blockchain to database
+- ✅ **4NF Database**: Normalized schema with materialized views
+- ✅ **ML Integration**: 5 models with database storage
+- ✅ **Comprehensive Tests**: 39 Brownie tests + Django tests
+- ✅ **API Documentation**: Swagger/OpenAPI + GraphQL
+- ✅ **RPC Server**: JSON-RPC 2.0 for admin tools
+
+---
 
 ## 🧪 Testing
 
-Run tests with pytest:
-```bash
-pytest
-```
-
-Run with coverage:
-```bash
-pytest --cov=. --cov-report=html
-```
-
-Run specific test file:
-```bash
-pytest tests/test_models.py
-pytest tests/test_api.py
-```
-
-## 🚀 Production Deployment
-
-### Checklist
-
-1. **Environment Variables**:
-   - Set `DEBUG=False` in `.env`
-   - Generate a strong `SECRET_KEY`:
-     ```python
-     from django.core.management.utils import get_random_secret_key
-     print(get_random_secret_key())
-     ```
-   - Configure proper `ALLOWED_HOSTS`
-   - Set secure database credentials
-   - Configure CORS origins for your frontend domain
-
-2. **Database**:
-   - Use PostgreSQL in production
-   - Set up database backups
-   - Configure connection pooling
-
-3. **Security**:
-   - Set up SSL/TLS certificates
-   - Use HTTPS only
-   - Configure secure cookie settings
-   - Set up rate limiting
-
-4. **Server**:
-   - Use a production WSGI server (gunicorn, uwsgi)
-   - Set up reverse proxy (nginx, Apache)
-   - Configure static file serving
-   - Set up process management (supervisor, systemd)
-
-5. **Monitoring**:
-   - Set up logging (Sentry, Loggly, etc.)
-   - Monitor database performance
-   - Set up health checks
-   - Monitor Celery tasks
-
-### Example Gunicorn Setup
+### Smart Contract Tests
 
 ```bash
-pip install gunicorn
-gunicorn config.wsgi:application --bind 0.0.0.0:8000 --workers 4
+cd contracts
+brownie test                    # All 39 tests
+brownie test --coverage         # With coverage
 ```
 
-### Example Nginx Configuration
+### Backend Tests
 
-```nginx
-server {
-    listen 80;
-    server_name your-domain.com;
-    
-    location / {
-        proxy_pass http://127.0.0.1:8000;
-        proxy_set_header Host $host;
-        proxy_set_header X-Real-IP $remote_addr;
-    }
-    
-    location /static/ {
-        alias /path/to/staticfiles/;
-    }
-}
+```bash
+cd backend
+pytest                          # All tests
+pytest tests/test_api.py        # API tests
 ```
 
-## 🐛 Troubleshooting
+### Integration Verification
 
-### Database Connection Issues
-- Check PostgreSQL is running: `pg_isready`
-- Verify database credentials in `.env`
-- Ensure database exists: `psql -l`
+```bash
+cd backend
+python manage.py verify_ml_db_integration --test-all
+```
 
-### Redis Connection Issues
-- Check Redis is running: `redis-cli ping`
-- Verify Redis URL in `.env`
+**See [`TESTING_GUIDE.md`](TESTING_GUIDE.md) for complete manual testing workflow.**
 
-### Migration Issues
-- Reset migrations: `python manage.py migrate --run-syncdb`
-- Check for migration conflicts
+---
 
-### Celery Not Working
-- Ensure Redis is running
-- Check Celery worker logs
-- Verify `CELERY_BROKER_URL` in settings
+## 📚 Documentation
 
-## 📝 Environment Variables
+- **Root**: This file (architecture & quick start)
+- **Backend**: [`backend/README.md`](backend/README.md)
+- **Contracts**: [`contracts/README.md`](contracts/README.md)
+- **Database**: [`backend/db_docs/README.md`](backend/db_docs/README.md)
+- **ML**: [`ml/README.md`](ml/README.md)
+- **Testing**: [`TESTING_GUIDE.md`](TESTING_GUIDE.md)
 
-Key environment variables (see `.env.example`):
+---
 
-- `SECRET_KEY`: Django secret key
-- `DEBUG`: Debug mode (True/False)
-- `ALLOWED_HOSTS`: Comma-separated list of allowed hosts
-- `DB_NAME`, `DB_USER`, `DB_PASSWORD`, `DB_HOST`, `DB_PORT`: Database settings
-- `CELERY_BROKER_URL`: Redis URL for Celery
-- `CORS_ALLOWED_ORIGINS`: Frontend origins
-- `WEBHOOK_SECRET`: Secret for webhook verification
+## 🔧 Environment Variables
 
-## 🤝 Contributing
+### Backend (`.env`)
 
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Add tests
-5. Submit a pull request
+```bash
+SECRET_KEY=your-secret-key
+DEBUG=True
+POSTGRES_DB=predicthub_db
+POSTGRES_USER=postgres
+POSTGRES_PASSWORD=postgres
+POSTGRES_HOST=localhost
+POSTGRES_PORT=5432
+CELERY_BROKER_URL=redis://localhost:6379/0
+WEB3_PROVIDER_URL=http://localhost:8545
+CONTRACT_ADDRESS=0x...
+```
 
-## 📄 License
+### Smart Contracts (`.env`)
+
+```bash
+PRIVATE_KEY=your-private-key
+WEB3_INFURA_PROJECT_ID=your-infura-id
+```
+
+---
+
+## 🐳 Docker Deployment
+
+```bash
+docker-compose up -d
+```
+
+Services:
+- **web**: Django server (port 8000)
+- **db**: PostgreSQL (port 5432)
+- **redis**: Redis (port 6379)
+- **celery**: Celery worker
+- **celery-beat**: Celery scheduler
+- **indexer**: Event listener
+
+**Note**: Docker files are at the root level. The build context includes `backend/` and `ml/` directories.
+
+---
+
+## 📈 API Endpoints
+
+### Core Endpoints
+
+- `GET /api/markets/` - List markets
+- `POST /api/markets/{id}/trade/` - Place trade
+- `GET /api/trades/` - List trades
+- `GET /api/indexer/rpc/` - JSON-RPC endpoint
+
+### ML Endpoints
+
+- `POST /api/ml/risk/predict/` - Predict trade risk
+- `GET /api/ml/health/` - Platform health status
+- `GET /api/ml/manipulation/market/{id}/` - Manipulation analysis
+
+### Documentation
+
+- `GET /swagger/` - Swagger UI
+- `GET /redoc/` - ReDoc
+- `GET /graphql/` - GraphQL Playground
+
+---
+
+## 🔍 Monitoring
+
+### Indexer Status
+
+```bash
+# Via Django admin
+http://localhost:8000/admin/indexer/recent-events/
+
+# Via JSON-RPC
+curl -X POST http://localhost:8000/api/indexer/rpc/ \
+  -H "Content-Type: application/json" \
+  -d '{"jsonrpc":"2.0","method":"get_indexer_status","params":{},"id":1}'
+```
+
+### Database Queries
+
+```sql
+-- Check indexed events
+SELECT COUNT(*) FROM indexer_onchaineventlog;
+
+-- Check ML predictions
+SELECT COUNT(*) FROM ml_traderiskprediction;
+
+-- Check materialized view
+SELECT * FROM market_volume_by_tag;
+```
+
+---
+
+## 🛠️ Development
+
+### Adding New Events
+
+1. Add event to `contracts/contracts/PredictionMarket.sol`
+2. Update `EventProcessor` in `backend/indexer/services.py`
+3. Add test in `contracts/tests/`
+4. Run migrations if new DB fields needed
+
+### Adding New ML Models
+
+1. Create model file in `ml/`
+2. Add service in `ml/services/`
+3. Create API endpoint in `backend/ml_api/views.py`
+4. Add DB model in `ml/models.py` (if using Django models)
+5. Run migrations from `backend/` directory
+
+---
+
+## 📝 License
 
 BSD License
 
-## 👥 Support
+---
 
-For issues and questions:
-- Check the API documentation at `/swagger/`
-- Review the ERD diagram in `erd.md`
-- Check Django admin panel at `/admin/`
+## 🤝 Support
 
-## 🎯 Roadmap
+- **API Docs**: http://localhost:8000/swagger/
+- **Admin Panel**: http://localhost:8000/admin/
+- **Testing Guide**: See `TESTING_GUIDE.md`
 
-- [ ] Enhanced AMM with slippage protection
-- [ ] Oracle integration for automatic resolution
-- [ ] On-chain indexer integration
-- [ ] Advanced dispute resolution system
-- [ ] Real-time price updates via WebSockets
-- [ ] Market creation by users (with approval)
-- [ ] Advanced analytics and charts
+---
 
+## ✅ SDF2 Requirements Status
+
+- ✅ Smart Contract with events (`UserCreated`, `LiquidityAdded`, `TransactionCreated`)
+- ✅ ≥10 Brownie tests (39 tests total)
+- ✅ 4NF Database schema
+- ✅ Materialized view for dashboard
+- ✅ Indexer with event listener
+- ✅ API endpoints (`/api/history`, `/api/user/{id}`)
+- ✅ JSON-RPC server
+- ✅ ML models with DB integration
+- ✅ Docker Compose setup
+
+**All requirements met!** 🎉

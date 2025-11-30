@@ -35,7 +35,7 @@ class EventListener:
         logger.info("Starting WebSocket event listener")
         
         # Subscribe to all events
-        event_names = ['MarketCreated', 'TradeExecuted', 'LiquidityAdded', 'MarketResolved']
+        event_names = ['UserCreated', 'MarketCreated', 'TradeExecuted', 'TransactionCreated', 'LiquidityAdded', 'MarketResolved']
         
         async def handle_event(event_data):
             """Handle incoming event"""

@@ -96,9 +96,11 @@ class EventProcessor:
                 
                 # Process based on event type
                 processing_result = None
-                if event_name == 'MarketCreated':
+                if event_name == 'UserCreated':
+                    processing_result = self._process_user_created(event_log, args)
+                elif event_name == 'MarketCreated':
                     processing_result = self._process_market_created(event_log, args)
-                elif event_name == 'TradeExecuted':
+                elif event_name == 'TradeExecuted' or event_name == 'TransactionCreated':
                     processing_result = self._process_trade_executed(event_log, args)
                 elif event_name == 'LiquidityAdded':
                     processing_result = self._process_liquidity_added(event_log, args)
@@ -162,6 +164,35 @@ class EventProcessor:
                 pass
             
             return {'success': False, 'duplicate': False, 'error': str(e)}
+    
+    def _process_user_created(self, event_log: OnchainEventLog, args: Dict[str, Any]) -> Dict[str, Any]:
+        """Process UserCreated event - creates user in database from wallet address"""
+        user_address = args.get('user', '')
+        timestamp = args.get('timestamp', 0)
+        
+        if not user_address:
+            raise ValueError("user address is required")
+        
+        # Get or create user by wallet address
+        user = get_or_create_user_by_address(user_address)
+        
+        # Update user metadata if needed
+        if timestamp:
+            from datetime import datetime
+            created_at = datetime.fromtimestamp(timestamp, tz=timezone.utc)
+            # Only update if user was just created
+            if user.created_at > created_at:
+                # Don't update, user already exists
+                pass
+        
+        event_log.user_address = user_address
+        event_log.save()
+        
+        return {
+            'user_id': user.id,
+            'user_address': user_address,
+            'created': True,
+        }
     
     def _process_market_created(self, event_log: OnchainEventLog, args: Dict[str, Any]) -> Dict[str, Any]:
         """Process MarketCreated event"""

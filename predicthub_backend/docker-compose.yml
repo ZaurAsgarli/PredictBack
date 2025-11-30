@@ -39,7 +39,10 @@ services:
       retries: 5
 
   web:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile
+    working_dir: /app
     command: python manage.py runserver 0.0.0.0:8000
     volumes:
       - .:/app
@@ -53,6 +56,8 @@ services:
       redis:
         condition: service_healthy
     environment:
+      - PYTHONPATH=/app
+      - DJANGO_SETTINGS_MODULE=config.settings
       - POSTGRES_HOST=db
       - POSTGRES_DB=${POSTGRES_DB:-predicthub_db}
       - POSTGRES_USER=${POSTGRES_USER:-postgres}
@@ -60,19 +65,32 @@ services:
       - POSTGRES_PORT=5432
       - CELERY_BROKER_URL=redis://redis:6379/0
       - CELERY_RESULT_BACKEND=redis://redis:6379/0
+    healthcheck:
+      test: ["CMD", "python", "-c", "import django; django.setup()"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
 
   celery:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile
+    working_dir: /app
     command: celery -A config worker -l info
     volumes:
       - .:/app
     env_file:
-      - .env
+      - backend/.env
     depends_on:
-      - db
-      - redis
-      - web
+      web:
+        condition: service_healthy
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
     environment:
+      - PYTHONPATH=/app
+      - DJANGO_SETTINGS_MODULE=config.settings
       - POSTGRES_HOST=db
       - POSTGRES_DB=${POSTGRES_DB:-predicthub_db}
       - POSTGRES_USER=${POSTGRES_USER:-postgres}
@@ -82,17 +100,25 @@ services:
       - CELERY_RESULT_BACKEND=redis://redis:6379/0
 
   celery-beat:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile
+    working_dir: /app
     command: celery -A config beat -l info
     volumes:
       - .:/app
     env_file:
-      - .env
+      - backend/.env
     depends_on:
-      - db
-      - redis
-      - web
+      web:
+        condition: service_healthy
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
     environment:
+      - PYTHONPATH=/app
+      - DJANGO_SETTINGS_MODULE=config.settings
       - POSTGRES_HOST=db
       - POSTGRES_DB=${POSTGRES_DB:-predicthub_db}
       - POSTGRES_USER=${POSTGRES_USER:-postgres}
@@ -100,6 +126,35 @@ services:
       - POSTGRES_PORT=5432
       - CELERY_BROKER_URL=redis://redis:6379/0
       - CELERY_RESULT_BACKEND=redis://redis:6379/0
+
+  indexer:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    working_dir: /app
+    command: python manage.py listen_events --poll-interval 12
+    volumes:
+      - .:/app
+    env_file:
+      - backend/.env
+    depends_on:
+      web:
+        condition: service_healthy
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    environment:
+      - PYTHONPATH=/app
+      - DJANGO_SETTINGS_MODULE=config.settings
+      - POSTGRES_HOST=db
+      - POSTGRES_DB=${POSTGRES_DB:-predicthub_db}
+      - POSTGRES_USER=${POSTGRES_USER:-postgres}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-postgres}
+      - POSTGRES_PORT=5432
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - CELERY_RESULT_BACKEND=redis://redis:6379/0
+    restart: unless-stopped
 
 volumes:
   postgres_data:

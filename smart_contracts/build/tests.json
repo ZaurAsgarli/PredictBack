@@ -1,0 +1,389 @@
+{
+  "contracts": {
+    "PredictionMarket": "7caf3e45d9b11610c09181e8c76538a543537653"
+  },
+  "tests": {
+    "tests/test_prediction_market.py": {
+      "coverage": false,
+      "isolated": false,
+      "results": ".....................",
+      "sha1": "aa6c1312c9b7de197ef7c4e6a840f9034313623d",
+      "txhash": [
+        "0f3b66c36d31b686335af2e88df9f2552291a6f2",
+        "132d34226fd9f204fc908576ef87b9ef23aec6ec",
+        "1f548404c9448f891ee7ac4d424d56ef52e27462",
+        "4e7e751af3a4c7320070c0869100d31e5bd7ead3",
+        "4f39c898c82ac79a222d3dcfafd0a650af605caf",
+        "51b5bab8a8a3117b4d0362f919b12b3d18e12c68",
+        "787511533f29cd7ad35221d1f2d579e7a0f2c7dd",
+        "79369f548e1833f8626fb738650a3eee515d3f7b",
+        "aef1190292ae0f945027f64cfeb2c7ac8b7a19a3",
+        "b3f3bfcee94b5ab8343626847e7adf7469693920",
+        "ed5868d5cf3f8185a22b75f53bdccb73e63a1dec"
+      ]
+    },
+    "tests/test_prediction_market_error_paths.py": {
+      "coverage": false,
+      "isolated": false,
+      "results": "..................",
+      "sha1": "2e42667e6c8785b73e14f895eb943780e285f4b2",
+      "txhash": [
+        "0ee1843cc63a08a79e602d65302a87ee395464b0",
+        "16e5cd82ed938926a66af1f9f1f668579ff6bd64",
+        "2842cbbf1d2eab8d75fa4a7b8569c47bd84a61c6",
+        "2d57d870c297289cba3d85fa828d79df1f2af4f9",
+        "63013bab31eb45f793ca8555df98eeda3365840a",
+        "6569a70efe7266ae28914e5e849852fac53e8121",
+        "792b7400378759f0fb7cb7fd79ec7c170269e9ad",
+        "87d1882468cee31606794042dab8f220deafa1cb",
+        "89f85704993794e2511145f551ec03aa23aa90d3",
+        "9e08d7782df0ea3c1341576f6d105aa7a882d13b",
+        "bcaf9b254841c0aa6c23baf1b7f79b9d98f41985",
+        "bee320be1804361d7af0116226146b5a56caa365",
+        "d94639bba05cfcd6b411aeec0342aae88d873053",
+        "dee6b083eec7f75c416ed20578a30020d356cfbd",
+        "e4406011fcda7fb04c7c55cf8b65eabbbd275d2e",
+        "e989dc6358e3954cbe7c16bbf2928dcd674b086e",
+        "f56ee382b5ddd9a189f6de10b140f3ccc90dde46",
+        "f7a330faeebc925638b0c6f74d8306aa129bb026",
+        "f9c5ed6e6178c1b222c3c40de3c8bb72bb2424bf",
+        "ff7c825766b3e2b1c04d1ec7a1da83a0f7df2bab"
+      ]
+    }
+  },
+  "tx": {
+    "0ee1843cc63a08a79e602d65302a87ee395464b0": {
+      "PredictionMarket": {
+        "0": [
+          [],
+          [],
+          []
+        ]
+      }
+    },
+    "0f3b66c36d31b686335af2e88df9f2552291a6f2": {
+      "PredictionMarket": {
+        "0": [
+          [
+            11,
+            12
+          ],
+          [
+            28
+          ],
+          [
+            27
+          ]
+        ]
+      }
+    },
+    "132d34226fd9f204fc908576ef87b9ef23aec6ec": {
+      "PredictionMarket": {
+        "0": [
+          [],
+          [],
+          []
+        ]
+      }
+    },
+    "16e5cd82ed938926a66af1f9f1f668579ff6bd64": {
+      "PredictionMarket": {
+        "0": [
+          [],
+          [],
+          []
+        ]
+      }
+    },
+    "1f548404c9448f891ee7ac4d424d56ef52e27462": {
+      "PredictionMarket": {
+        "0": [
+          [
+            18
+          ],
+          [
+            30
+          ],
+          []
+        ]
+      }
+    },
+    "2842cbbf1d2eab8d75fa4a7b8569c47bd84a61c6": {
+      "PredictionMarket": {
+        "0": [
+          [
+            0
+          ],
+          [
+            25
+          ],
+          []
+        ]
+      }
+    },
+    "2d57d870c297289cba3d85fa828d79df1f2af4f9": {
+      "PredictionMarket": {
+        "0": [
+          [
+            11,
+            12
+          ],
+          [
+            28
+          ],
+          [
+            27
+          ]
+        ]
+      }
+    },
+    "4e7e751af3a4c7320070c0869100d31e5bd7ead3": {
+      "PredictionMarket": {
+        "0": [
+          [],
+          [],
+          []
+        ]
+      }
+    },
+    "4f39c898c82ac79a222d3dcfafd0a650af605caf": {
+      "PredictionMarket": {
+        "0": [
+          [],
+          [],
+          []
+        ]
+      }
+    },
+    "51b5bab8a8a3117b4d0362f919b12b3d18e12c68": {
+      "PredictionMarket": {
+        "0": [
+          [
+            0
+          ],
+          [
+            25
+          ],
+          []
+        ]
+      }
+    },
+    "63013bab31eb45f793ca8555df98eeda3365840a": {
+      "PredictionMarket": {
+        "0": [
+          [],
+          [],
+          []
+        ]
+      }
+    },
+    "6569a70efe7266ae28914e5e849852fac53e8121": {
+      "PredictionMarket": {
+        "0": [
+          [],
+          [],
+          []
+        ]
+      }
+    },
+    "787511533f29cd7ad35221d1f2d579e7a0f2c7dd": {
+      "PredictionMarket": {
+        "0": [
+          [],
+          [],
+          []
+        ]
+      }
+    },
+    "792b7400378759f0fb7cb7fd79ec7c170269e9ad": {
+      "PredictionMarket": {
+        "0": [
+          [
+            0
+          ],
+          [
+            25
+          ],
+          []
+        ]
+      }
+    },
+    "79369f548e1833f8626fb738650a3eee515d3f7b": {
+      "PredictionMarket": {
+        "0": [
+          [],
+          [],
+          []
+        ]
+      }
+    },
+    "87d1882468cee31606794042dab8f220deafa1cb": {
+      "PredictionMarket": {
+        "0": [
+          [
+            18
+          ],
+          [
+            30
+          ],
+          []
+        ]
+      }
+    },
+    "89f85704993794e2511145f551ec03aa23aa90d3": {
+      "PredictionMarket": {
+        "0": [
+          [],
+          [],
+          []
+        ]
+      }
+    },
+    "9e08d7782df0ea3c1341576f6d105aa7a882d13b": {
+      "PredictionMarket": {
+        "0": [
+          [],
+          [],
+          []
+        ]
+      }
+    },
+    "aef1190292ae0f945027f64cfeb2c7ac8b7a19a3": {
+      "PredictionMarket": {
+        "0": [
+          [
+            7
+          ],
+          [
+            26
+          ],
+          []
+        ]
+      }
+    },
+    "b3f3bfcee94b5ab8343626847e7adf7469693920": {
+      "PredictionMarket": {
+        "0": [
+          [],
+          [],
+          []
+        ]
+      }
+    },
+    "bcaf9b254841c0aa6c23baf1b7f79b9d98f41985": {
+      "PredictionMarket": {
+        "0": [
+          [],
+          [],
+          []
+        ]
+      }
+    },
+    "bee320be1804361d7af0116226146b5a56caa365": {
+      "PredictionMarket": {
+        "0": [
+          [
+            11
+          ],
+          [
+            27
+          ],
+          []
+        ]
+      }
+    },
+    "d94639bba05cfcd6b411aeec0342aae88d873053": {
+      "PredictionMarket": {
+        "0": [
+          [
+            7
+          ],
+          [
+            26
+          ],
+          []
+        ]
+      }
+    },
+    "dee6b083eec7f75c416ed20578a30020d356cfbd": {
+      "PredictionMarket": {
+        "0": [
+          [],
+          [],
+          []
+        ]
+      }
+    },
+    "e4406011fcda7fb04c7c55cf8b65eabbbd275d2e": {
+      "PredictionMarket": {
+        "0": [
+          [
+            7
+          ],
+          [
+            26
+          ],
+          []
+        ]
+      }
+    },
+    "e989dc6358e3954cbe7c16bbf2928dcd674b086e": {
+      "PredictionMarket": {
+        "0": [
+          [],
+          [],
+          []
+        ]
+      }
+    },
+    "ed5868d5cf3f8185a22b75f53bdccb73e63a1dec": {
+      "PredictionMarket": {
+        "0": [
+          [
+            11
+          ],
+          [
+            27
+          ],
+          []
+        ]
+      }
+    },
+    "f56ee382b5ddd9a189f6de10b140f3ccc90dde46": {
+      "PredictionMarket": {
+        "0": [
+          [],
+          [],
+          []
+        ]
+      }
+    },
+    "f7a330faeebc925638b0c6f74d8306aa129bb026": {
+      "PredictionMarket": {
+        "0": [
+          [],
+          [],
+          []
+        ]
+      }
+    },
+    "f9c5ed6e6178c1b222c3c40de3c8bb72bb2424bf": {
+      "PredictionMarket": {
+        "0": [
+          [],
+          [],
+          []
+        ]
+      }
+    },
+    "ff7c825766b3e2b1c04d1ec7a1da83a0f7df2bab": {
+      "PredictionMarket": {
+        "0": [
+          [],
+          [],
+          []
+        ]
+      }
+    }
+  }
+}

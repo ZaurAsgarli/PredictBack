@@ -80,6 +80,7 @@ urlpatterns = [
     path('api/indexer/', include('indexer.urls'), name='indexer'),
     path('api/disputes/', include('disputes.urls'), name='disputes'),
     path('api/analytics/', include('analytics.urls'), name='analytics'),
+    path('api/ml/', include('ml_api.urls'), name='ml_api'),
     
     # Webhooks (legacy support, can be moved to /api/indexer/ if needed)
     path('api/webhook/onchain/', OnchainWebhookView.as_view(), name='onchain-webhook'),

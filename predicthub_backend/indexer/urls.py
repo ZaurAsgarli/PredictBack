@@ -1,10 +1,11 @@
 from django.urls import path
-from .views import webhook_handler, rpc_endpoint
+from .views import OnchainWebhookView
+from .rpc_server import jsonrpc_endpoint
 
 app_name = 'indexer'
 
 urlpatterns = [
-    path('', webhook_handler, name='webhook'),
-    path('rpc/', rpc_endpoint, name='rpc'),
+    path('webhook/', OnchainWebhookView.as_view(), name='onchain-webhook'),
+    path('rpc/', jsonrpc_endpoint, name='jsonrpc-endpoint'),
 ]
 

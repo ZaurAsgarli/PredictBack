@@ -1,0 +1,150 @@
+# Generated migration for ML prediction models
+
+from django.db import migrations, models
+import django.db.models.deletion
+import django.core.validators
+
+
+class Migration(migrations.Migration):
+
+    initial = True
+
+    dependencies = [
+        ('trades', '0001_initial'),
+        ('users', '0001_initial'),
+        ('markets', '0001_initial'),
+    ]
+
+    operations = [
+        migrations.CreateModel(
+            name='TradeRiskPrediction',
+            fields=[
+                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('score', models.FloatField(help_text='Anomaly score from Isolation Forest model', validators=[django.core.validators.MinValueValidator(-1.0), django.core.validators.MaxValueValidator(1.0)])),
+                ('label', models.IntegerField(help_text='Prediction label: 1 (normal) or -1 (anomaly)')),
+                ('risk_level', models.CharField(choices=[('LOW', 'Low'), ('MEDIUM', 'Medium'), ('HIGH', 'High'), ('CRITICAL', 'Critical')], default='LOW', max_length=20)),
+                ('amount_staked', models.DecimalField(blank=True, decimal_places=2, max_digits=12, null=True)),
+                ('time_since_last_trade', models.FloatField(blank=True, null=True)),
+                ('hour_of_day', models.IntegerField(blank=True, null=True)),
+                ('user_total_trades', models.IntegerField(blank=True, null=True)),
+                ('user_avg_stake', models.DecimalField(blank=True, decimal_places=2, max_digits=12, null=True)),
+                ('model_version', models.CharField(default='v1.0', max_length=50)),
+                ('created_at', models.DateTimeField(auto_now_add=True)),
+                ('market', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='risk_predictions', to='markets.market')),
+                ('trade', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='risk_predictions', to='trades.trade')),
+                ('user', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='risk_predictions', to='users.user')),
+            ],
+            options={
+                'ordering': ['-created_at'],
+            },
+        ),
+        migrations.CreateModel(
+            name='PlatformHealthMetric',
+            fields=[
+                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('platform_stress_level', models.FloatField(help_text='Platform stress level (0-1)', validators=[django.core.validators.MinValueValidator(0.0), django.core.validators.MaxValueValidator(1.0)])),
+                ('systemic_risk_index', models.FloatField(help_text='Systemic risk index (0-1)', validators=[django.core.validators.MinValueValidator(0.0), django.core.validators.MaxValueValidator(1.0)])),
+                ('health_status', models.CharField(choices=[('HEALTHY', 'Healthy'), ('STABLE', 'Stable'), ('ELEVATED', 'Elevated'), ('WARNING', 'Warning'), ('CRITICAL', 'Critical')], default='HEALTHY', max_length=20)),
+                ('alert_level', models.CharField(choices=[('LOW', 'Low'), ('MEDIUM', 'Medium'), ('HIGH', 'High'), ('CRITICAL', 'Critical')], default='LOW', max_length=20)),
+                ('model1_stress_score', models.FloatField(default=0.0)),
+                ('model2_stress_score', models.FloatField(default=0.0)),
+                ('model3_stress_score', models.FloatField(default=0.0)),
+                ('model4_stress_score', models.FloatField(default=0.0)),
+                ('model1_anomaly_rate', models.FloatField(blank=True, null=True)),
+                ('model2_avg_hhi', models.FloatField(blank=True, null=True)),
+                ('model3_avg_volatility', models.FloatField(blank=True, null=True)),
+                ('model4_manipulation_rate', models.FloatField(blank=True, null=True)),
+                ('alert_messages', models.TextField(blank=True)),
+                ('aggregation_window_hours', models.IntegerField(default=24)),
+                ('model_version', models.CharField(default='v1.0', max_length=50)),
+                ('created_at', models.DateTimeField(auto_now_add=True)),
+            ],
+            options={
+                'ordering': ['-created_at'],
+            },
+        ),
+        migrations.CreateModel(
+            name='ModelPredictionAudit',
+            fields=[
+                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('model_name', models.CharField(choices=[('model1', 'Model 1: Suspicious Trades'), ('model2', 'Model 2: Position Exposure'), ('model3', 'Model 3: Token Forecasting'), ('model4', 'Model 4: Market Manipulation'), ('model5', 'Model 5: Platform Health')], max_length=20)),
+                ('input_data', models.JSONField(help_text='Input data to the model')),
+                ('output_data', models.JSONField(help_text='Model output/prediction')),
+                ('execution_time_ms', models.FloatField(blank=True, null=True)),
+                ('error_message', models.TextField(blank=True, null=True)),
+                ('created_at', models.DateTimeField(auto_now_add=True)),
+            ],
+            options={
+                'ordering': ['-created_at'],
+            },
+        ),
+        migrations.CreateModel(
+            name='MarketManipulationScore',
+            fields=[
+                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('manipulation_score', models.FloatField(help_text='Overall manipulation score (0-1)', validators=[django.core.validators.MinValueValidator(0.0), django.core.validators.MaxValueValidator(1.0)])),
+                ('is_manipulation_suspected', models.BooleanField(default=False)),
+                ('risk_level', models.CharField(choices=[('LOW', 'Low'), ('MEDIUM', 'Medium'), ('HIGH', 'High'), ('CRITICAL', 'Critical')], default='LOW', max_length=20)),
+                ('pump_dump_score', models.FloatField(default=0.0, validators=[django.core.validators.MinValueValidator(0.0), django.core.validators.MaxValueValidator(1.0)])),
+                ('wash_trading_score', models.FloatField(default=0.0, validators=[django.core.validators.MinValueValidator(0.0), django.core.validators.MaxValueValidator(1.0)])),
+                ('clique_id', models.IntegerField(blank=True, null=True)),
+                ('time_window_minutes', models.IntegerField(default=60)),
+                ('model_version', models.CharField(default='v1.0', max_length=50)),
+                ('created_at', models.DateTimeField(auto_now_add=True)),
+                ('market', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='manipulation_scores', to='markets.market')),
+                ('user', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='manipulation_scores', to='users.user')),
+            ],
+            options={
+                'ordering': ['-created_at'],
+            },
+        ),
+        migrations.AddIndex(
+            model_name='traderiskprediction',
+            index=models.Index(fields=['user', '-created_at'], name='ml_traderis_user_id_idx'),
+        ),
+        migrations.AddIndex(
+            model_name='traderiskprediction',
+            index=models.Index(fields=['trade'], name='ml_traderis_trade_id_idx'),
+        ),
+        migrations.AddIndex(
+            model_name='traderiskprediction',
+            index=models.Index(fields=['risk_level', '-created_at'], name='ml_traderis_risk_le_idx'),
+        ),
+        migrations.AddIndex(
+            model_name='platformhealthmetric',
+            index=models.Index(fields=['-created_at'], name='ml_platform_created_idx'),
+        ),
+        migrations.AddIndex(
+            model_name='platformhealthmetric',
+            index=models.Index(fields=['health_status', '-created_at'], name='ml_platform_health_s_idx'),
+        ),
+        migrations.AddIndex(
+            model_name='platformhealthmetric',
+            index=models.Index(fields=['alert_level', '-created_at'], name='ml_platform_alert_l_idx'),
+        ),
+        migrations.AddIndex(
+            model_name='modelpredictionaudit',
+            index=models.Index(fields=['model_name', '-created_at'], name='ml_modelpre_model_n_idx'),
+        ),
+        migrations.AddIndex(
+            model_name='marketmanipulationscore',
+            index=models.Index(fields=['market', '-created_at'], name='ml_marketma_market__idx'),
+        ),
+        migrations.AddIndex(
+            model_name='marketmanipulationscore',
+            index=models.Index(fields=['user', '-created_at'], name='ml_marketma_user_id_idx'),
+        ),
+        migrations.AddIndex(
+            model_name='marketmanipulationscore',
+            index=models.Index(fields=['is_manipulation_suspected', '-created_at'], name='ml_marketma_is_mani_idx'),
+        ),
+        migrations.AddIndex(
+            model_name='marketmanipulationscore',
+            index=models.Index(fields=['risk_level', '-created_at'], name='ml_marketma_risk_le_idx'),
+        ),
+        migrations.AddConstraint(
+            model_name='marketmanipulationscore',
+            constraint=models.UniqueConstraint(fields=['market', 'user', 'created_at'], name='ml_marketmanipulationscore_unique'),
+        ),
+    ]
+

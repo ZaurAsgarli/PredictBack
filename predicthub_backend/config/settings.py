@@ -49,6 +49,8 @@ INSTALLED_APPS = [
     'analytics',
     'indexer',
     'utils',
+    'ml',
+    'ml_api',
 ]
 
 MIDDLEWARE = [

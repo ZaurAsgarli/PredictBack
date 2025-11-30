@@ -8,8 +8,20 @@ from typing import Optional, Dict, Any, List, Callable
 from decimal import Decimal
 from web3 import Web3, AsyncWeb3
 from web3.types import TxReceipt, LogReceipt, Wei
-from web3.middleware import ExtraDataToPOAMiddleware
-from web3.providers import HTTPProvider, WebSocketProvider
+try:
+    from web3.middleware import ExtraDataToPOAMiddleware
+except ImportError:
+    # For web3.py v6+, use geth_poa_middleware instead
+    try:
+        from web3.middleware import geth_poa_middleware as ExtraDataToPOAMiddleware
+    except ImportError:
+        ExtraDataToPOAMiddleware = None
+from web3.providers import HTTPProvider
+try:
+    from web3.providers import WebSocketProvider
+except ImportError:
+    # For web3.py v6+, it's WebsocketProvider (lowercase 's')
+    from web3.providers import WebsocketProvider as WebSocketProvider
 from django.conf import settings
 import logging
 
@@ -50,8 +62,14 @@ class ContractService:
             # Auto-detect Base POA compatibility (Base Sepolia uses POA)
             if self.chain_id in [84532, 84531]:  # Base Sepolia or Base Goerli
                 try:
-                    self.w3.middleware_onion.inject(ExtraDataToPOAMiddleware, layer=0)
-                    logger.info("POA middleware injected for Base network")
+                    if ExtraDataToPOAMiddleware:
+                        self.w3.middleware_onion.inject(ExtraDataToPOAMiddleware, layer=0)
+                        logger.info("POA middleware injected for Base network")
+                    else:
+                        # Try geth_poa_middleware for web3.py v6+
+                        from web3.middleware import geth_poa_middleware
+                        self.w3.middleware_onion.inject(geth_poa_middleware, layer=0)
+                        logger.info("POA middleware (geth_poa_middleware) injected for Base network")
                 except Exception as e:
                     logger.warning(f"Could not inject POA middleware: {e}")
             
