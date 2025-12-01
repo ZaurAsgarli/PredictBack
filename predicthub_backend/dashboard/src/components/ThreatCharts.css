@@ -1,0 +1,150 @@
+/* ================================================
+   ThreatCharts Component Styles
+   Side-by-side chart display with dark theme
+   ================================================ */
+
+.threat-charts {
+    margin-bottom: 2rem;
+}
+
+.threat-charts-header {
+    margin-bottom: 1.25rem;
+}
+
+.threat-charts-header h2 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--text-primary, #e6edf3);
+    padding-left: 0.75rem;
+    border-left: 3px solid var(--accent-purple, #a371f7);
+    margin: 0;
+}
+
+/* Charts Container - Side by Side */
+.charts-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+}
+
+/* Individual Chart Card */
+.chart-card {
+    background: var(--bg-card, #161d26);
+    border: 1px solid var(--border-subtle, rgba(255, 255, 255, 0.08));
+    border-radius: 16px;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.chart-card h3 {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text-secondary, #8b949e);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin: 0 0 1.25rem 0;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--border-subtle, rgba(255, 255, 255, 0.08));
+}
+
+/* Chart Wrapper */
+.chart-wrapper {
+    height: 280px;
+    position: relative;
+}
+
+.pie-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Custom Legend for Bar Chart */
+.chart-legend-custom {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    margin-top: 1.25rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border-subtle, rgba(255, 255, 255, 0.06));
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.8rem;
+    font-family: var(--font-mono, 'JetBrains Mono', monospace);
+    color: var(--text-secondary, #8b949e);
+}
+
+.legend-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+}
+
+.legend-dot.info {
+    background: rgba(63, 185, 80, 0.9);
+    box-shadow: 0 0 8px rgba(63, 185, 80, 0.4);
+}
+
+.legend-dot.warning {
+    background: rgba(210, 153, 34, 0.9);
+    box-shadow: 0 0 8px rgba(210, 153, 34, 0.4);
+}
+
+.legend-dot.alert {
+    background: rgba(248, 81, 73, 0.9);
+    box-shadow: 0 0 8px rgba(248, 81, 73, 0.4);
+}
+
+/* No Data State */
+.no-data {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    color: var(--text-muted, #6e7681);
+    font-size: 0.9rem;
+    font-style: italic;
+}
+
+/* Hover Effects */
+.chart-card {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.chart-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+}
+
+/* Responsive Layout */
+@media (max-width: 900px) {
+    .charts-container {
+        grid-template-columns: 1fr;
+    }
+    
+    .chart-wrapper {
+        height: 250px;
+    }
+}
+
+@media (max-width: 600px) {
+    .chart-card {
+        padding: 1rem;
+    }
+    
+    .chart-legend-custom {
+        flex-direction: column;
+        align-items: center;
+        gap: 0.75rem;
+    }
+    
+    .chart-wrapper {
+        height: 220px;
+    }
+}
+
