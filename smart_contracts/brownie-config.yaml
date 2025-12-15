@@ -1,0 +1,40 @@
+# Brownie configuration file
+# Install: pip install eth-brownie
+# Initialize: brownie init
+# Run tests: brownie test
+
+dependencies:
+  - OpenZeppelin/openzeppelin-contracts@4.9.0
+
+compiler:
+  solc:
+    version: "0.8.20"
+    optimizer:
+      enabled: true
+      runs: 200
+
+networks:
+  development:
+    cmd_settings:
+      host: 127.0.0.1
+      port: 8545
+      gas_limit: 12000000
+      gas_price: 0
+      default_balance: 1000000
+  sepolia:
+    cmd_settings:
+      host: https://sepolia.infura.io/v3/$WEB3_INFURA_PROJECT_ID
+      gas_price: 20 gwei
+  base-sepolia:
+    cmd_settings:
+      host: https://sepolia.base.org
+      gas_price: 0.1 gwei
+
+wallets:
+  from_key: ${PRIVATE_KEY}
+
+reports:
+  exclude_contracts:
+    - SafeMath
+    - TestContract
+
