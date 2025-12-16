@@ -1,0 +1,33 @@
+graph TD
+    User((User)) -->|Action: Create/Trade| Frontend[Frontend App]
+    Frontend -->|Contract Call| Blockchain[Smart Contracts]
+    
+    subgraph "On-Chain (The 5 Pillars)"
+        Factory[MarketFactory]
+        AMM[AMM Liquidity]
+        Token[OutcomeToken]
+        Oracle[Oracle]
+        Dispute[DisputeBond]
+        
+        Factory -->|Deploys| AMM
+        AMM -->|Mints/Burns| Token
+        Oracle -->|Resolves| Factory
+        Dispute -->|Locks Funds| Oracle
+    end
+    
+    Blockchain -->|Event Emitted| Events(Log Events)
+    
+    subgraph "Off-Chain Services"
+        Indexer[Indexer Service]
+        Events -->|Listens| Indexer
+        Indexer -->|Parses| Parsing{Event Parser}
+        Parsing -->|LiquidityAdded| DB_Liq[(DB: LiquidityEvents)]
+        Parsing -->|MarketCreated| DB_Mkt[(DB: Markets)]
+        Parsing -->|TradeExecuted| DB_Trade[(DB: Trades)]
+        
+        ML[ML Decision Engine]
+        DB_Trade -->|Feeds| ML
+        ML -->|Risk Score| DB_Risk[(DB: SecurityLogs)]
+    end
+    
+    ML -->|Alert| Frontend

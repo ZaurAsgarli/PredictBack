@@ -1,9 +1,11 @@
-from rest_framework import status, generics, permissions
+from rest_framework import status, generics, permissions, views
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.auth import authenticate
 from django.utils import timezone
+from django.db.models import Sum, F, Window
+from django.db.models.functions import Rank
 from .models import User
 from .serializers import UserSerializer, SignUpSerializer, LoginSerializer
 from security_engine.models import LoginAttempt, SecurityLog
@@ -286,7 +288,53 @@ def login_view(request):
 @api_view(['GET'])
 @permission_classes([permissions.IsAuthenticated])
 def me_view(request):
-    """Get current user profile"""
-    serializer = UserSerializer(request.user)
+    """Get current user profile with enhanced metrics"""
+    user = request.user
+    # Annotate with volume and rank
+    
+    # This is a simplified rank calculation (in production use Window functions or cache)
+    # Total volume
+    total_volume = user.trades.aggregate(vol=Sum('amount_staked'))['vol'] or 0.0
+    user.total_volume = total_volume
+    
+    # Identify Rank based on total_points
+    rank = User.objects.filter(total_points__gt=user.total_points).count() + 1
+    user.rank_global = rank
+    
+    serializer = UserSerializer(user)
     return Response(serializer.data)
 
+
+class LeaderboardView(views.APIView):
+    """
+    Returns top 100 users by Total Points.
+    Logic: Total Winnings + Current Positions - Invested is abstracted into 'total_points' for MVP speed,
+    but we can extend query if needed.
+    """
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+    def get(self, request):
+        top_users = User.objects.order_by('-total_points')[:100]
+        
+        # We can annotate these too if needed in serializer
+        data = []
+        for i, u in enumerate(top_users):
+            u_data = UserSerializer(u).data
+            u_data['rank_global'] = i + 1
+            data.append(u_data)
+        
+        response_data = {
+            'leaderboard': data,
+            'user_rank': None
+        }
+
+        if request.user.is_authenticated:
+            # Find user rank
+            my_rank = User.objects.filter(total_points__gt=request.user.total_points).count() + 1
+            response_data['user_rank'] = {
+                'rank': my_rank,
+                'total_points': request.user.total_points,
+                'username': request.user.username
+            }
+
+        return Response(response_data)

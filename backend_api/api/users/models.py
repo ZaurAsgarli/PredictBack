@@ -15,6 +15,7 @@ class User(AbstractUser):
     total_points = models.DecimalField(max_digits=10, decimal_places=2, default=0.0)
     win_rate = models.DecimalField(max_digits=5, decimal_places=2, default=0.0)
     streak = models.IntegerField(default=0)
+    wallet_address = models.CharField(max_length=42, blank=True, null=True, unique=True)
     created_at = models.DateTimeField(auto_now_add=True)
     
     USERNAME_FIELD = 'email'

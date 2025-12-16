@@ -7,8 +7,11 @@ class UserSerializer(serializers.ModelSerializer):
     """Serializer for User model"""
     class Meta:
         model = User
-        fields = ['id', 'username', 'email', 'role', 'total_points', 'win_rate', 'streak', 'created_at']
-        read_only_fields = ['id', 'created_at', 'total_points', 'win_rate', 'streak']
+        fields = ['id', 'username', 'email', 'role', 'total_points', 'win_rate', 'streak', 'wallet_address', 'created_at', 'total_volume', 'rank_global']
+        read_only_fields = ['id', 'created_at', 'total_points', 'win_rate', 'streak', 'total_volume', 'rank_global']
+
+    total_volume = serializers.DecimalField(max_digits=12, decimal_places=2, read_only=True)
+    rank_global = serializers.IntegerField(read_only=True)
 
 
 class SignUpSerializer(serializers.ModelSerializer):
