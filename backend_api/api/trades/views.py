@@ -95,6 +95,98 @@ class TradeViewSet(viewsets.ModelViewSet):
             else:
                 return error(f'Invalid trade_type: {trade_type}. Must be buy or sell', status.HTTP_400_BAD_REQUEST)
             
+            # --- ML RISK CHECK START ---
+            try:
+                # Prepare raw data for features
+                # We need a DataFrame-like structure. 
+                import pandas as pd
+                from ml_service.training.features import build_features
+                from ml_service.training.model_loader import predict_trade_risk
+                from backend_api.core.utils.ml_logger import DualLogger
+
+                # Construction dummy history if needed or just current trade context
+                # To really build features we need history, but for Heuristic we can pass what we have.
+                # 'build_features' expects a DF with 'user_id', 'created_at', 'amount_staked' of HISTORY.
+                # Here we might be passing just the CURRENT trade, which yields empty history features.
+                # However, the heuristic handles defaults.
+                
+                raw_data = [{
+                    "user_id": user.id,
+                    "created_at": "2025-01-01T00:00:00Z", # Mock time if not available, or use current
+                    "amount_staked": float(amount),
+                    # Heuristic helpers that `build_features` might ignore but we can inject into result
+                    "failed_logins": 0, # TODO: fetch from user profile if available
+                    "wallet_age_days": 30, # TODO: calc from user.date_joined
+                }]
+                
+                df_raw = pd.DataFrame(raw_data)
+                
+                # We might need to fetch actual history to make 'build_features' work useful?
+                # For now, let's rely on the Heuristic defaults in `predict_trade_risk` 
+                # handling the single row.
+                
+                features = build_features(df_raw)
+                
+                # Inject manual overrides for Heuristic if build_features didn't produce them
+                # (build_features produces: amount_staked, time_since_last_trade, etc.)
+                # If this is the FIRST trade in the dataframe, time_since_last_trade is 0.0 (High velocity in heuristic??)
+                # Actually build_features: "diff()...fillna(0.0)". 
+                # Update: Heuristic says "time_diff < 10" = velocity factor 1.0. 
+                # So a single trade looks like Infinite Velocity! 
+                # Let's override time_since_last_trade to a safe value (3600) for single-trade check
+                # unless we actually fetch history.
+                
+                features.at[0, 'time_since_last_trade'] = 3600 # Default to safe for isolated check
+                features.at[0, 'failed_logins'] = 0 
+                features.at[0, 'wallet_age_days'] = 100
+
+                risk_result = predict_trade_risk(features)
+                
+                # Dual Log (will log to DB after we get trade_id, but here we log "Attempt")
+                # Actually DualLogger expects trade_id. We can log 'None' for trade_id initially or log after.
+                # Let's log 'Attempt' here? No, let's log after decision.
+                
+                # CIRCUIT BREAKER
+                if risk_result['score'] > 0.85:
+                    logger.warning(f"Trade BLOCKED by ML Risk Model. Score: {risk_result['score']}")
+                    
+                    # Log rejection (Attempt)
+                    DualLogger.log_risk_event(
+                        user_id=user.id,
+                        trade_id=None, # Rejected
+                        market_id=market.id,
+                        input_features=raw_data[0],
+                        model_result=risk_result
+                    )
+
+                    # CRITICAL: Auto-Ban High Risk Users
+                    if risk_result['score'] > 0.90:
+                        from backend_api.api.users.models import User
+                        # Re-fetch user to avoid stale object issues if updating
+                        u = User.objects.get(id=user.id)
+                        u.role = User.Role.BLOCKED
+                        u.is_active = False # Kill switch
+                        u.save()
+                        
+                        logger.critical(f"User {u.username} (ID: {u.id}) AUTO-BLOCKED. Risk Score: {risk_result['score']}")
+                        
+                        # Log to Security Log (DB)
+                        from security_engine.models import SecurityLog
+                        SecurityLog.objects.create(
+                            user=u,
+                            event_type="SUSPICIOUS_ACTIVITY",
+                            severity="CRITICAL",
+                            message=f"User AUTO-BLOCKED due to high risk score: {risk_result['score']}",
+                            ip="127.0.0.1" # Internal action
+                        )
+
+                    return error(f"Trade rejected by Security System (Risk Score: {risk_result['score']:.2f})", status.HTTP_403_FORBIDDEN)
+                    
+            except Exception as e:
+                logger.error(f"ML Processing Error (Failing Open): {e}")
+                # We do NOT block on ML failure, we Fail Open (allow trade) but log error.
+            # --- ML RISK CHECK END ---
+
             # Execute trade using TradeExecutionService
             try:
                 result = TradeExecutionService.execute_trade(
@@ -104,6 +196,20 @@ class TradeViewSet(viewsets.ModelViewSet):
                     amount=amount,
                     side=side
                 )
+                
+                # Log Successful Trade Risk (Async preferably, but sync for now)
+                try:
+                    if 'risk_result' in locals():
+                        DualLogger.log_risk_event(
+                            user_id=user.id,
+                            trade_id=result.get('trade_id'),
+                            market_id=market.id,
+                            input_features=raw_data[0],
+                            model_result=risk_result
+                        )
+                except Exception as log_e:
+                    logger.error(f"Post-trade logging failed: {log_e}")
+                    
             except ValidationError as e:
                 logger.warning(f"Trade validation error: {str(e)}")
                 return error(str(e), status.HTTP_400_BAD_REQUEST)

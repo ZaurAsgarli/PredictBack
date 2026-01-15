@@ -63,6 +63,7 @@ INSTALLED_APPS = [
     'backend_api.core.utils',
     'ml_service.training',
     'backend_api.api.ml_api',
+    'backend_api.core',
     'security_engine',
 ]
 
@@ -243,6 +244,11 @@ LOGGING = {
             'format': '{levelname} {asctime} {module} {message}',
             'style': '{',
         },
+        'detailed': {
+            'format': '[{asctime}] [{levelname}] [{name}] {message}',
+            'style': '{',
+            'datefmt': '%Y-%m-%d %H:%M:%S',
+        },
     },
     'handlers': {
         'console': {
@@ -254,6 +260,21 @@ LOGGING = {
             'filename': os.path.join(logs_dir, 'django.log'),
             'formatter': 'verbose',
         },
+        'transactions_file': {
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(logs_dir, 'transactions.log'),
+            'formatter': 'detailed',
+        },
+        'security_file': {
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(logs_dir, 'security.log'),
+            'formatter': 'detailed',
+        },
+        'ml_engine_file': {
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(logs_dir, 'ml_engine.log'),
+            'formatter': 'detailed',
+        },
     },
     'root': {
         'handlers': ['console', 'file'],
@@ -262,6 +283,21 @@ LOGGING = {
     'loggers': {
         'django': {
             'handlers': ['console', 'file'],
+            'level': 'INFO',
+            'propagate': False,
+        },
+        'transactions': {
+            'handlers': ['transactions_file', 'console'],
+            'level': 'INFO',
+            'propagate': False,
+        },
+        'security': {
+            'handlers': ['security_file', 'console'],
+            'level': 'INFO',
+            'propagate': False,
+        },
+        'ml_engine': {
+            'handlers': ['ml_engine_file', 'console'],
             'level': 'INFO',
             'propagate': False,
         },
