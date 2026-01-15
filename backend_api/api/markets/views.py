@@ -112,6 +112,15 @@ class MarketViewSet(viewsets.ReadOnlyModelViewSet):
         from positions.serializers import PositionSerializer
         serializer = PositionSerializer(position)
         return success(serializer.data)
+    
+    @action(detail=True, methods=['get'])
+    def price_history(self, request, pk=None):
+        """Get price history for a specific market"""
+        market = self.get_object()
+        price_history = PriceHistory.objects.filter(market=market).order_by('timestamp')
+        
+        serializer = PriceHistorySerializer(price_history, many=True)
+        return success(serializer.data)
 
 
 class MarketCreateViewSet(viewsets.ModelViewSet):
