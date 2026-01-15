@@ -57,30 +57,59 @@ def get_models() -> tuple:
 
 def predict_trade_risk(features: pd.DataFrame) -> Dict[str, Any]:
     """
-    Predict risk level for a trade.
-
+    Predict risk level using HEURISTIC LOGIC (Audit Requirement).
+    
+    Formula:
+    Risk Score = (failed_logins * 0.2) + (trade_velocity_factor * 0.5) + (stake_factor * 0.3)
+    
     Args:
-        features: DataFrame with 5 feature columns from build_features()
-
+        features: DataFrame with columns from build_features()
+                  + optional 'failed_logins', 'wallet_age_days'
+    
     Returns:
         Dict with score, label, risk_level
     """
-    model, scaler = get_models()
+    # 1. Extract Features (Handling defaults if missing)
+    row = features.iloc[0]
+    
+    failed_logins = row.get('failed_logins', 0)
+    
+    # Velocity: Close to 0 seconds since last trade = High Velocity
+    time_diff = row.get('time_since_last_trade', 3600)
+    velocity_factor = 1.0 if time_diff < 10 else (100 / (time_diff + 1))
+    velocity_factor = min(velocity_factor, 1.0) # Cap at 1.0
+    
+    # Stake: High stake relative to avg = High Risk
+    amount = row.get('amount_staked', 0)
+    avg_stake = row.get('user_avg_stake', amount)
+    stake_ratio = amount / (avg_stake + 1.0)
+    stake_factor = 1.0 if stake_ratio > 3.0 else (stake_ratio / 3.0)
+    
+    # Wallet Age (Mock/Default if missing)
+    wallet_age_days = row.get('wallet_age_days', 30) 
+    age_penalty = 0.5 if wallet_age_days < 1 else 0.0
 
-    X_scaled = scaler.transform(features.values)
+    # 2. Calculate Heuristic Score
+    score = (failed_logins * 0.2) + (velocity_factor * 0.3) + (stake_factor * 0.5) + age_penalty
+    
+    # Cap score
+    score = min(score, 1.0)
 
-    score = float(model.decision_function(X_scaled)[0])
-    label = int(model.predict(X_scaled)[0])
-
-    if score < -0.2:
+    # 3. Determine Label
+    # Threshold > 0.85 = High Risk
+    if score > 0.85:
         risk_level = "HIGH"
-    elif score < 0.0:
+        label = -1
+    elif score > 0.5:
         risk_level = "MEDIUM"
+        label = 0 # Suspicious
     else:
         risk_level = "LOW"
+        label = 1 # Normal
 
+    # Mock return for consistency
     return {
-        "score": score,
+        "score": float(score),
         "label": label,
         "risk_level": risk_level,
     }

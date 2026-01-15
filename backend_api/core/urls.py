@@ -5,6 +5,10 @@ from django.contrib import admin
 from django.urls import path, include
 from django.http import JsonResponse
 from rest_framework import permissions
+from rest_framework_simplejwt.views import (
+    TokenObtainPairView,
+    TokenRefreshView,
+)
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 from strawberry.django.views import GraphQLView
@@ -12,6 +16,7 @@ from .graphql_schema import schema
 from backend_api.api.indexer.views import OnchainWebhookView
 from backend_api.api.webhooks.onchain_webhook import onchain_webhook
 from backend_api.api.indexer.admin import recent_events_view, backfill_status_view, heartbeat_view
+from backend_api.api.admin.views import MLInsightsView, DeploymentLogsView
 
 
 def api_root(request):
@@ -71,6 +76,10 @@ urlpatterns = [
     # GraphQL
     path('graphql/', GraphQLView.as_view(schema=schema)),
     
+    # Auth
+    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+
     # API Routes - All under /api/ prefix
     path('api/', api_root, name='api-root-api'),
     path('api/users/', include('backend_api.api.users.urls'), name='users'),
@@ -82,6 +91,10 @@ urlpatterns = [
     path('api/disputes/', include('backend_api.api.disputes.urls'), name='disputes'),
     path('api/analytics/', include('backend_api.api.analytics.urls'), name='analytics'),
     path('api/ml/', include('backend_api.api.ml_api.urls'), name='ml_api'),
+    # ML / Admin Dashboard Routes (Explicitly placed before security_engine to avoid conflict)
+    path('api/admin/ml-insights/', MLInsightsView.as_view(), name='admin-ml-insights'),
+    path('api/admin/deployments/', DeploymentLogsView.as_view(), name='admin-deployments'),
+
     path('api/admin/', include('security_engine.urls'), name='security'),
     
     # Webhooks (legacy support, can be moved to /api/indexer/ if needed)

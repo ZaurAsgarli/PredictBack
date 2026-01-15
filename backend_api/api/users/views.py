@@ -285,14 +285,57 @@ def login_view(request):
     })
 
 
-@api_view(['GET'])
+@api_view(['GET', 'PATCH'])
 @permission_classes([permissions.IsAuthenticated])
 def me_view(request):
-    """Get current user profile with enhanced metrics"""
+    """Get or update current user profile with enhanced metrics"""
     user = request.user
-    # Annotate with volume and rank
     
-    # This is a simplified rank calculation (in production use Window functions or cache)
+    # Handle PATCH request to update profile
+    if request.method == 'PATCH':
+        # Allowed fields to update
+        allowed_fields = ['username', 'wallet_address', 'first_name', 'last_name']
+        updated_fields = []
+        
+        for field in allowed_fields:
+            if field in request.data:
+                new_value = request.data[field]
+                
+                # Validate wallet_address format
+                if field == 'wallet_address' and new_value:
+                    if not new_value.startswith('0x') or len(new_value) != 42:
+                        return Response(
+                            {'error': 'Invalid wallet address format. Must be 0x followed by 40 hex characters.'},
+                            status=400
+                        )
+                    # Check uniqueness
+                    if User.objects.filter(wallet_address=new_value).exclude(id=user.id).exists():
+                        return Response(
+                            {'error': 'This wallet address is already in use.'},
+                            status=400
+                        )
+                
+                # Validate username
+                if field == 'username' and new_value:
+                    if len(new_value) < 3:
+                        return Response(
+                            {'error': 'Username must be at least 3 characters.'},
+                            status=400
+                        )
+                    # Check uniqueness
+                    if User.objects.filter(username=new_value).exclude(id=user.id).exists():
+                        return Response(
+                            {'error': 'This username is already taken.'},
+                            status=400
+                        )
+                
+                setattr(user, field, new_value)
+                updated_fields.append(field)
+        
+        if updated_fields:
+            user.save(update_fields=updated_fields)
+    
+    # Calculate metrics (for both GET and PATCH responses)
     # Total volume
     total_volume = user.trades.aggregate(vol=Sum('amount_staked'))['vol'] or 0.0
     user.total_volume = total_volume
@@ -303,6 +346,7 @@ def me_view(request):
     
     serializer = UserSerializer(user)
     return Response(serializer.data)
+
 
 
 class LeaderboardView(views.APIView):

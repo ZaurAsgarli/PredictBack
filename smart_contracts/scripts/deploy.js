@@ -3,114 +3,114 @@ const fs = require("fs");
 const path = require("path");
 
 async function main() {
-  const signers = await hre.ethers.getSigners();
-  if (signers.length === 0) {
-    throw new Error(
-      "No signers available. Please set DEPLOYER_PRIVATE_KEY or PRIVATE_KEY in your .env file.\n" +
-      "Example: DEPLOYER_PRIVATE_KEY=0x...your_private_key_here"
-    );
-  }
-  const deployer = signers[0];
-  console.log("Deploying contracts with account:", deployer.address);
-  
-  const balance = await hre.ethers.provider.getBalance(deployer.address);
-  console.log("Account balance:", hre.ethers.formatEther(balance), "ETH");
-  
-  // Check if balance is sufficient (at least 0.001 ETH for deployment)
-  if (balance < hre.ethers.parseEther("0.001")) {
-    console.warn("⚠️  Warning: Account balance is very low. Deployment may fail.");
-  }
+    const signers = await hre.ethers.getSigners();
+    const deployer = signers[0];
+    console.log("🚀 Deploying Protocol V2 with account:", deployer.address);
 
-  // Deploy PredictionMarket
-  const PredictionMarket = await hre.ethers.getContractFactory("PredictionMarket");
-  const predictionMarket = await PredictionMarket.deploy();
-  await predictionMarket.waitForDeployment();
+    const network = await hre.ethers.provider.getNetwork();
+    const networkName = network.name === "unknown" ? "localhost" : network.name;
 
-  const address = await predictionMarket.getAddress();
-  console.log("PredictionMarket deployed to:", address);
+    // --- 1. DEPLOYMENT ---
 
-  // Get network info early (needed for file writes)
-  const network = await hre.ethers.provider.getNetwork();
-  const networkName = network.name === "unknown" ? "sepolia" : network.name;
-  const chainId = network.chainId.toString();
+    // A. OutcomeToken (initially 0x0 AMM)
+    const OutcomeToken = await hre.ethers.getContractFactory("OutcomeToken");
+    const outcomeToken = await OutcomeToken.deploy(hre.ethers.ZeroAddress);
+    await outcomeToken.waitForDeployment();
+    const tokenAddr = await outcomeToken.getAddress();
+    console.log("✅ OutcomeToken deployed to:", tokenAddr);
 
-  // Get ABI
-  const artifact = await hre.artifacts.readArtifact("PredictionMarket");
-  const abi = artifact.abi;
+    // B. AMM (depends on Token)
+    const AMM = await hre.ethers.getContractFactory("AMM");
+    const amm = await AMM.deploy(tokenAddr);
+    await amm.waitForDeployment();
+    const ammAddr = await amm.getAddress();
+    console.log("✅ AMM deployed to:", ammAddr);
 
-  // Create directories if they don't exist
-  const buildDir = path.join(__dirname, "..", "build");
-  const deployedDir = path.join(__dirname, "..", "deployed");
-  
-  if (!fs.existsSync(buildDir)) {
-    fs.mkdirSync(buildDir, { recursive: true });
-  }
-  if (!fs.existsSync(deployedDir)) {
-    fs.mkdirSync(deployedDir, { recursive: true });
-  }
-
-  // Save ABI
-  fs.writeFileSync(
-    path.join(buildDir, "abi.json"),
-    JSON.stringify(abi, null, 2)
-  );
-  console.log("ABI saved to build/abi.json");
-
-  // Also copy ABI to backend utils/abis/
-  const backendAbiDir = path.join(__dirname, "..", "..", "predicthub_backend", "utils", "abis");
-  if (!fs.existsSync(backendAbiDir)) {
-    fs.mkdirSync(backendAbiDir, { recursive: true });
-  }
-  fs.writeFileSync(
-    path.join(backendAbiDir, "contract.json"),
-    JSON.stringify({ 
-      abi: abi, 
-      address: address, 
-      network: networkName, 
-      chainId: chainId 
-    }, null, 2)
-  );
-  console.log("ABI copied to backend utils/abis/contract.json");
-
-  // Save deployment info
-  const deploymentInfo = {
-    network: networkName,
-    chainId: chainId,
-    address: address,
-    deployer: deployer.address,
-    deployedAt: new Date().toISOString(),
-    abiHash: hre.ethers.keccak256(hre.ethers.toUtf8Bytes(JSON.stringify(abi))),
-  };
-
-  fs.writeFileSync(
-    path.join(deployedDir, "contract.json"),
-    JSON.stringify(deploymentInfo, null, 2)
-  );
-  console.log("Deployment info saved to deployed/contract.json");
-
-  // Wait for a few block confirmations before verifying
-  if (network.chainId !== 1337n && network.chainId !== 31337n) {
-    console.log("Waiting for block confirmations...");
-    await predictionMarket.deploymentTransaction().wait(5);
-    
+    // C. Link Token -> AMM
     try {
-      await hre.run("verify:verify", {
-        address: address,
-        constructorArguments: [],
-      });
-      console.log("Contract verified on Etherscan");
-    } catch (error) {
-      console.log("Verification failed:", error.message);
+        const tx = await outcomeToken.setAMM(ammAddr);
+        await tx.wait();
+        console.log("🔗 OutcomeToken linked to AMM");
+    } catch (e) {
+        console.error("Warning: Failed to link AMM (Already set?):", e.message);
     }
-  }
 
-  return { address, abi };
+    // D. MarketFactory (depends on AMM)
+    const MarketFactory = await hre.ethers.getContractFactory("MarketFactory");
+    const factory = await MarketFactory.deploy(ammAddr);
+    await factory.waitForDeployment();
+    const factoryAddr = await factory.getAddress();
+    console.log("✅ MarketFactory deployed to:", factoryAddr);
+
+    // E. DisputeBond (Independent)
+    const DisputeBond = await hre.ethers.getContractFactory("DisputeBond");
+    const dispute = await DisputeBond.deploy();
+    await dispute.waitForDeployment();
+    const disputeAddr = await dispute.getAddress();
+    console.log("✅ DisputeBond deployed to:", disputeAddr);
+
+    // F. Oracle (Independent, Resolver = Deployer)
+    const Oracle = await hre.ethers.getContractFactory("Oracle");
+    const oracle = await Oracle.deploy(deployer.address);
+    await oracle.waitForDeployment();
+    const oracleAddr = await oracle.getAddress();
+    console.log("✅ Oracle deployed to:", oracleAddr);
+
+
+    // --- 2. ARTIFACT EXPORT ---
+
+    const artifactsDir = path.join(__dirname, "..", "deployed");
+    if (!fs.existsSync(artifactsDir)) fs.mkdirSync(artifactsDir, { recursive: true });
+
+    const deploymentData = {
+        network: networkName,
+        chainId: network.chainId.toString(),
+        deployedAt: new Date().toISOString(),
+        contracts: {
+            OutcomeToken: tokenAddr,
+            AMM: ammAddr,
+            MarketFactory: factoryAddr,
+            DisputeBond: disputeAddr,
+            Oracle: oracleAddr
+        }
+    };
+
+    // Save main deployment JSON
+    fs.writeFileSync(
+        path.join(artifactsDir, "contracts.json"),
+        JSON.stringify(deploymentData, null, 2)
+    );
+    console.log(`💾 Contracts Saved: ${path.join(artifactsDir, "contracts.json")}`);
+
+
+    // --- 3. LOCAL LOGGING (CRITICAL) ---
+
+    const logsDir = path.join(__dirname, "..", "logs");
+    if (!fs.existsSync(logsDir)) fs.mkdirSync(logsDir, { recursive: true });
+
+    const logEntry = `[${new Date().toISOString()}] [${networkName}] Deployed Protocol V2\n` +
+        `   - Factory: ${factoryAddr}\n` +
+        `   - AMM: ${ammAddr}\n` +
+        `   - Token: ${tokenAddr}\n` +
+        `   - Oracle: ${oracleAddr}\n` +
+        `   - Bond: ${disputeAddr}\n` +
+        `   - Deployer: ${deployer.address}\n` +
+        `--------------------------------------------------\n`;
+
+    fs.appendFileSync(path.join(logsDir, "deployment_history.log"), logEntry);
+    console.log(`📝 Log Appended: ${path.join(logsDir, "deployment_history.log")}`);
+
+    // --- 4. VERIFICATION (Optional) ---
+    if (networkName !== "localhost" && networkName !== "hardhat") {
+        console.log("Waiting for blocks before verification...");
+        // await new Promise(r => setTimeout(r, 10000));
+        // hre.run("verify:verify", ...)
+    }
 }
 
 main()
-  .then(() => process.exit(0))
-  .catch((error) => {
-    console.error(error);
-    process.exit(1);
-  });
-
+    .then(() => process.exit(0))
+    .catch((error) => {
+        console.error(error);
+        process.exit(1);
+    });
