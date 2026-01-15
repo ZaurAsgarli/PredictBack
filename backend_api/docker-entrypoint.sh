@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bsh
 set -e
 
 # Set Python path
